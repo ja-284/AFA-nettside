@@ -1,5 +1,5 @@
 // Ende-til-ende-test mot `npm run preview` (wrangler pages dev på port 8788).
-// Kjør: npm run build && npm run db:migrate:local && npm run preview   (i ett vindu)
+// Kjør: npm run build:local && npm run db:migrate:local && npm run preview   (i ett vindu)
 //       npm run test:e2e                                                (i et annet)
 // Bruker Turnstile-testnøkkelen fra .dev.vars og ADMIN_PASSWORD derfra.
 import { readFileSync } from 'node:fs';

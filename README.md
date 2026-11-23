@@ -1,5 +1,7 @@
 # AFA Videos – nettside
 
+**https://afa-videos.pages.dev**
+
 Nettsiden til **AFA Videos**: korte reels og bilder for lokale bedrifter på Fornebu, Snarøya og Lysaker,
 laget av elever gjennom valgfaget «Utvikling av produkt og tjenester».
 
@@ -13,7 +15,7 @@ laget av elever gjennom valgfaget «Utvikling av produkt og tjenester».
 ```bash
 npm install
 cp .dev.vars.example .dev.vars
-npm run build
+npm run build:local
 npm run db:migrate:local
 npm run preview          # http://localhost:8788  (admin: /admin/, passord i .dev.vars)
 ```
@@ -22,7 +24,8 @@ npm run preview          # http://localhost:8788  (admin: /admin/, passord i .de
 
 | Kommando | Hva den gjør |
 | --- | --- |
-| `npm run build` | Bygger siden til `dist/` og lager sikkerhetsheadere (CSP) |
+| `npm run build` | Bygger siden til `dist/` og lager sikkerhetsheadere (CSP) – brukes av Cloudflare |
+| `npm run build:local` | Som `build`, men med Turnstile-testnøkkel, for testing på egen maskin |
 | `npm run preview` | Kjører siden med skjemaer og database lokalt (Wrangler) |
 | `npm run check` | Typesjekk av Astro-filer og serverfunksjoner |
 | `npm run lint` | ESLint |

@@ -18,9 +18,9 @@ CF_ACCESS_TEAM_DOMAIN = ""
 CF_ACCESS_AUD = ""
 
 # D1-database for bestillinger, vurderinger og kontakthenvendelser.
-# Bytt database_id med ID-en du får fra `npx wrangler d1 create afa-videos`.
+# Databasen er opprettet i EU (jurisdiction=eu). ID-en under er ikke hemmelig.
 [[d1_databases]]
 binding = "DB"
 database_name = "afa-videos"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "b3ca25a9-10a1-4fdb-a734-6cd3c68e01a3"
 migrations_dir = "migrations"

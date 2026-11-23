@@ -1,4 +1,5 @@
 # Kopier til .dev.vars for lokal utvikling (filen sjekkes ikke inn i git).
+# Bygg med `npm run build:local`, så bruker skjemaene testnøkkelen som passer til denne.
 # Turnstile-testnøkkel som alltid godkjenner. Se https://developers.cloudflare.com/turnstile/troubleshooting/testing/
 TURNSTILE_SECRET=1x0000000000000000000000000000000AA
 ADMIN_PASSWORD=lokalt-testpassord

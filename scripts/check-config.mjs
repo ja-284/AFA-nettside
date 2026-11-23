@@ -15,7 +15,7 @@ const unnamed = site.team.filter((m) => /navn kommer/i.test(m.name)).length;
 if (unnamed) add(`${unnamed} i teamet mangler navn (site.team).`);
 const noPhoto = site.team.filter((m) => !m.image).length;
 if (noPhoto) add(`${noPhoto} i teamet mangler bilde (src/assets/team/).`);
-if (site.turnstile.siteKey.startsWith('1x0000') && !process.env.PUBLIC_TURNSTILE_SITE_KEY) add('Turnstile bruker testnøkkel (site.turnstile.siteKey eller PUBLIC_TURNSTILE_SITE_KEY).');
+if (site.turnstile.siteKey.startsWith('1x0000')) add('Turnstile bruker testnøkkel (site.turnstile.siteKey).');
 const missing = Object.entries(images).filter(([, s]) => !existsSync(`src/assets/photos/${s.file}`));
 if (missing.length) add(`${missing.length} av ${Object.keys(images).length} bilder mangler: ${missing.map(([, s]) => s.file).join(', ')}`);
 if (readFileSync('wrangler.toml', 'utf8').includes('00000000-0000-0000-0000-000000000000')) add('database_id i wrangler.toml er en plassholder.');

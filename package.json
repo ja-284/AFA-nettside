@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && node scripts/postbuild.mjs",
+    "build:local": "node scripts/build-local.mjs",
     "preview": "wrangler pages dev --port 8788",
     "check": "astro check && tsc -p functions/tsconfig.json",
     "lint": "eslint .",

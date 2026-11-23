@@ -7,6 +7,28 @@ Regn med 45–60 minutter første gang. Alt er gratis på Cloudflares gratisplan
 > Skjemaene sendes til små serverfunksjoner i mappen `functions/` (**Pages Functions**),
 > som lagrer i en **D1**-database og bruker **Turnstile** som spamvern.
 
+## Status: dette er allerede satt opp
+
+| Hva | Status |
+| --- | --- |
+| Cloudflare-konto | ✅ |
+| D1-database `afa-videos` (EU) med tabeller | ✅ (steg 3–4) |
+| Pages-prosjekt `afa-videos` koblet til GitHub `ja-284/AFA-nettside` | ✅ (steg 6A) |
+| Turnstile-widget «AFA Videos» + `TURNSTILE_SECRET` | ✅ (steg 5) |
+| `ADMIN_SESSION_SECRET` og `RATE_LIMIT_SALT` | ✅ (steg 7) |
+| **`ADMIN_PASSWORD`** | ❌ Gjør dette selv – se «Sett admin-passordet» under |
+| E-post, eget domene, Access, statistikk | Valgfritt (steg 9–12) |
+
+Siden ligger på **https://afa-videos.pages.dev** og publiseres på nytt hver gang noe lastes opp til `main` på GitHub.
+Stegene under er beholdt som dokumentasjon, og for hvis noe må settes opp på nytt.
+
+### Sett admin-passordet (det eneste som gjenstår)
+
+1. Gå til https://dash.cloudflare.com → **Workers & Pages** → **afa-videos** → **Settings** → **Variables and Secrets**.
+2. Trykk **Add** → Type: **Secret** → Variable name: `ADMIN_PASSWORD` → Value: et langt passord (minst 16 tegn, gjerne fire tilfeldige ord) → **Save**.
+3. Gå til **Deployments**, trykk **⋯** på den øverste og velg **Retry deployment**, så tas passordet i bruk.
+4. Logg inn på https://afa-videos.pages.dev/admin/.
+
 ---
 
 ## 0. Dette trenger du
@@ -212,7 +234,7 @@ Web Analytics bruker ingen informasjonskapsler, så dere trenger fortsatt ikke s
 ```bash
 npm install
 cp .dev.vars.example .dev.vars   # testnøkler og lokalt admin-passord
-npm run build                    # bygger siden til dist/
+npm run build:local              # bygger siden til dist/ med Turnstile-testnøkkelen
 npm run db:migrate:local         # lager tabellene i en lokal database
 npm run preview                  # starter alt på http://localhost:8788
 ```
@@ -228,7 +250,7 @@ npm run preview                  # starter alt på http://localhost:8788
 
 | Problem | Løsning |
 | --- | --- |
-| «Spamvernet lastet ikke» | Sjekk at site key i `site.ts` er riktig og at domenet står under Hostnames i Turnstile. |
+| «Spamvernet lastet ikke» | Sjekk at site key i `site.ts` er riktig og at domenet står under Hostnames i Turnstile. Lokalt: bygg med `npm run build:local`. |
 | «Vi klarte ikke å bekrefte at du er et menneske» | `TURNSTILE_SECRET` er feil eller hører til en annen widget. |
 | «Skjemaet er ikke ferdig satt opp ennå» | `TURNSTILE_SECRET` er ikke satt. Se steg 7. |
 | «Admin er ikke satt opp» | Verken `ADMIN_PASSWORD` eller Access er satt. Se steg 7 eller 11. |

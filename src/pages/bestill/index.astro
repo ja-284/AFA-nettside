@@ -8,6 +8,7 @@ import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
 import TurnstileNote from '../../components/TurnstileNote.astro';
 import { formatPrice, site } from '../../config/site';
+import { turnstileSiteKey } from '../../lib/turnstile-key';
 import { areas, contactPrefs, employeeRanges, HONEYPOT, industries, startOptions, wishes } from '../../lib/forms';
 
 const crumbs = [
@@ -19,7 +20,7 @@ const packageOptions = [
   ...site.packages.map((p) => ({ value: p.id, label: p.name, desc: `${p.tagline} ${formatPrice(p)}${p.unit && p.price !== null ? ` ${p.unit}` : ''}.` })),
   { value: 'usikker', label: 'Vet ikke ennå', desc: 'Helt greit. Vi hjelper dere å finne ut hva som passer.' },
 ];
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || site.turnstile.siteKey;
+const siteKey = turnstileSiteKey;
 const after = [
   { icon: 'chat' as const, text: `Vi tar kontakt. ${site.contact.responseTime}` },
   { icon: 'camera' as const, text: 'Vi avtaler en dag og kommer for å filme.' },

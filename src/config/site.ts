@@ -319,14 +319,14 @@ export const site = {
   /** Delvis gjennomsiktig etikett på sider som er utkast. */
   draftNotice: 'Utkast – bekreftes av gruppen',
 
-  /** Cloudflare Turnstile (spamvern). Den offentlige nøkkelen (site key). */
+  /** Cloudflare Turnstile (spamvern). Den offentlige nøkkelen (site key) for afa-videos.pages.dev. */
   turnstile: {
     /**
-     * TODO: Bytt til ekte site key fra Cloudflare-dashbordet før publisering.
-     * Kan også settes med miljøvariabelen PUBLIC_TURNSTILE_SITE_KEY ved bygging.
-     * '1x00000000000000000000AA' er Cloudflares offisielle testnøkkel (godkjenner alltid).
+     * Offentlig nøkkel – trygg å ha i koden. Den hemmelige nøkkelen ligger som secret i Cloudflare.
+     * Lokalt (npm run dev / npm run build:local) brukes Cloudflares testnøkkel automatisk.
+     * Får dere eget domene: legg det til under Hostnames på widgeten «AFA Videos» i Turnstile.
      */
-    siteKey: '1x00000000000000000000AA',
+    siteKey: '0x4AAAAAAGPQVJC6j6Fsp7_t',
   },
 
   /** Cloudflare Web Analytics – informasjonskapselfri statistikk. Av som standard. */

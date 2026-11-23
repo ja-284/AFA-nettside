@@ -68,13 +68,22 @@ Til da vises pene plassholdere i riktig format.
 
 ## 6. Teknisk oppsett (se DEPLOY.md)
 
-- [ ] Cloudflare-konto og `npx wrangler login` (DEPLOY.md, steg 1–2).
-- [ ] D1-database og `database_id` i `wrangler.toml` (steg 3–4).
-- [ ] **Turnstile:** lag widget, legg **site key** i `site.turnstile.siteKey` og **secret** som `TURNSTILE_SECRET` (steg 5 og 7). Nå brukes testnøkler som ikke stopper spam.
-- [ ] `ADMIN_PASSWORD` (steg 7), og helst Cloudflare Access for `/admin` (steg 11).
+Allerede gjort (23. november 2026):
+
+- [x] Cloudflare-konto og API-nøkkel.
+- [x] D1-database `afa-videos`, lagret i EU, med tabeller. `database_id` står i `wrangler.toml`.
+- [x] Pages-prosjektet `afa-videos` (https://afa-videos.pages.dev), koblet til GitHub – publiseres automatisk ved push til `main`.
+- [x] Turnstile-widgeten «AFA Videos» med ekte nøkler. Site key i `site.ts`, `TURNSTILE_SECRET` som secret.
+- [x] Secrets `ADMIN_SESSION_SECRET` og `RATE_LIMIT_SALT`.
+
+Gjenstår:
+
+- [ ] **`ADMIN_PASSWORD`** – settes av dere selv, se DEPLOY.md steg 7. Uten den er admin stengt.
+- [ ] Cloudflare Access for `/admin` (anbefalt, steg 11).
 - [ ] **E-postvarsling** (valgfritt): `RESEND_API_KEY`, `NOTIFY_EMAIL` og `MAIL_FROM` (steg 9). Uten dette må dere sjekke admin jevnlig.
-- [ ] Eget domene (valgfritt, steg 10).
+- [ ] Eget domene (valgfritt, steg 10). Husk å legge domenet til i Turnstile-widgeten.
 - [ ] Besøksstatistikk uten informasjonskapsler (valgfritt, steg 12).
+- [ ] Slett API-nøkkelen «AFA-oppsett» (eller fjern rettighetene) når oppsettet er ferdig, hvis dere ikke trenger den mer.
 
 ## 7. Etter lansering
 
