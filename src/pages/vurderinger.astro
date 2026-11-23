@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ReviewsBlock from '../components/ReviewsBlock.astro';
+import Field from '../components/ui/Field.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import TurnstileNote from '../components/TurnstileNote.astro';
+import { site } from '../config/site';
+import { HONEYPOT } from '../lib/forms';
+
+const crumbs = [
+  { name: 'Hjem', href: '/' },
+  { name: 'Vurderinger', href: '/vurderinger/' },
+];
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || site.turnstile.siteKey;
+const starLabels = ['Dårlig', 'Ikke så bra', 'Greit', 'Bra', 'Veldig bra'];
+---
+<BaseLayout title="Vurderinger" description={`Hva kundene sier om ${site.name}. Alle vurderinger er fra ekte kunder og publiseres etter at vi har sett over dem.`} og="vurderinger" crumbs={crumbs}>
+  <PageHero eyebrow="Vurderinger" title="Hva kundene sier" lead="Alle vurderinger her er fra ekte kunder. Vi leser alt, og publiserer vurderingene etter at vi har sett over dem – også de som ikke er fem stjerner." crumbs={crumbs} />
+
+  <section class="section tone-cream" aria-labelledby="alle-vurderinger" style="padding-top: 0">
+    <div class="container">
+      <h2 id="alle-vurderinger" class="sr-only">Alle vurderinger</h2>
+      <ReviewsBlock mode="page" />
+    </div>
+  </section>
+
+  <section id="skriv" class="section tone-mist" aria-labelledby="skriv-title">
+    <div class="container review-grid">
+      <div class="stack" style="--stack: 1.25rem">
+        <p class="eyebrow" data-reveal>Skriv en vurdering</p>
+        <h2 id="skriv-title" class="title-md" data-reveal style="--i: 1">Har vi jobbet sammen?</h2>
+        <p class="muted" data-reveal style="--i: 2">Vi blir bedre av ærlige tilbakemeldinger. Vurderingen vises på siden når vi har sett over den. Navn og bedrift er valgfritt.</p>
+      </div>
+      <div class="card form-card">
+        <TurnstileNote />
+        <form action="/api/reviews" method="post" class="form-grid" novalidate data-simple-form="review" data-sitekey={siteKey} aria-labelledby="skriv-title">
+          <div class="form-alert" role="alert" data-form-alert></div>
+          <fieldset class="field" data-field-wrap="rating" aria-describedby="v-rating-error">
+            <legend class="fieldset-legend">Hvor fornøyd er du?</legend>
+            <div class="star-input">
+              {[5, 4, 3, 2, 1].map((n) => (
+                <>
+                  <input type="radio" name="rating" id={`v-star-${n}`} value={n} required class="sr-only" />
+                  <label for={`v-star-${n}`} title={starLabels[n - 1]}>
+                    <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" /></svg>
+                    <span class="sr-only">{n} av 5 stjerner – {starLabels[n - 1]}</span>
+                  </label>
+                </>
+              ))}
+            </div>
+            <p class="field-error" id="v-rating-error" aria-live="polite"></p>
+          </fieldset>
+          <Field name="text" label="Din vurdering" type="textarea" required minlength={10} maxlength={1000} rows={5} hint="Hva fungerte bra? Hva kan vi gjøre bedre?" idPrefix="v" />
+          <div class="form-grid two">
+            <Field name="name" label="Navn" autocomplete="name" maxlength={80} idPrefix="v" />
+            <Field name="company" label="Bedrift" autocomplete="organization" maxlength={120} idPrefix="v" />
+          </div>
+          <div class="field" data-field-wrap="consent">
+            <label class="check">
+              <input type="checkbox" name="consent" value="1" required id="v-consent" aria-describedby="v-consent-error" />
+              <span>Jeg samtykker til at vurderingen, og eventuelt navn og bedrift, kan publiseres på nettsiden. Jeg kan når som helst be om at den fjernes.</span>
+            </label>
+            <p class="field-error" id="v-consent-error" aria-live="polite"></p>
+          </div>
+          <div class="hp" aria-hidden="true">
+            <label for="v-hp">Nettside (ikke fyll ut)</label>
+            <input id="v-hp" type="text" name={HONEYPOT} tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="turnstile-box" data-turnstile></div>
+          <Button type="submit" size="lg" icon="send" data-submit>Send vurdering</Button>
+        </form>
+        <div class="success" data-form-success hidden tabindex="-1">
+          <span class="success-icon"><Icon name="check" size={28} /></span>
+          <p class="title-md">Takk for vurderingen!</p>
+          <p class="muted">Den vises på siden så snart vi har sett over den.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .review-grid {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .review-grid {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+  .form-card {
+    padding: clamp(24px, 4vw, 48px);
+  }
+  .star-input {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+  .star-input label {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .star-input svg {
+    fill: none;
+    stroke: var(--ink-soft);
+    stroke-width: 1.4;
+    transition: fill var(--dur-fast), stroke var(--dur-fast), transform var(--dur) var(--ease-spring);
+  }
+  .star-input label:hover svg,
+  .star-input label:hover ~ label svg,
+  .star-input input:checked ~ label svg {
+    fill: var(--sun);
+    stroke: #b37d10;
+  }
+  .star-input label:hover svg {
+    transform: scale(1.12);
+  }
+  .star-input input:focus-visible + label {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .success {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .success-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e3f3ec;
+    color: #0e4a37;
+  }
+</style>

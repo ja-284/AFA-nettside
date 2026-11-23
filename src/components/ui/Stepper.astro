@@ -1,0 +1,91 @@
+---
+/** Fremdriftsindikator for flertrinnsskjema. Oppdateres av src/scripts/order-form.ts. */
+interface Props {
+  steps: string[];
+}
+const { steps } = Astro.props;
+---
+<nav class="stepper" aria-label="Fremdrift i skjemaet" data-stepper>
+  <p class="stepper-count" aria-live="polite"><span data-stepper-current>1</span> av {steps.length}: <span data-stepper-name>{steps[0]}</span></p>
+  <div class="stepper-bar" aria-hidden="true"><span data-stepper-fill></span></div>
+  <ol class="stepper-list">
+    {steps.map((s, i) => (
+      <li data-step-dot={i} aria-current={i === 0 ? 'step' : undefined}>
+        <span class="num">{i + 1}</span>
+        <span class="name">{s}</span>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  :global(html:not(.js)) .stepper,
+  :global(html.reveal-fallback) .stepper:not(.is-on) {
+    display: none;
+  }
+  .stepper {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 2.5rem;
+  }
+  .stepper-count {
+    font-weight: 620;
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+  }
+  .stepper-bar {
+    height: 6px;
+    border-radius: 99px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .stepper-bar span {
+    display: block;
+    height: 100%;
+    width: 20%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--teal), var(--coral));
+    transition: width var(--dur) var(--ease-out);
+  }
+  .stepper-list {
+    display: none;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 760px) {
+    .stepper-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+    }
+  }
+  .stepper-list li {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+  }
+  .num {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 50%;
+    font-weight: 650;
+    font-size: 0.8125rem;
+    transition: all var(--dur-fast);
+  }
+  .stepper-list li[aria-current='step'] {
+    color: var(--ink);
+    font-weight: 620;
+  }
+  .stepper-list li[aria-current='step'] .num,
+  .stepper-list li.done .num {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: var(--cream);
+  }
+</style>

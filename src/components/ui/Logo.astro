@@ -1,0 +1,13 @@
+---
+interface Props {
+  size?: number;
+  class?: string;
+  light?: boolean;
+}
+const { size = 36, class: cls, light = false } = Astro.props;
+---
+<svg class={cls} width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <rect width="64" height="64" rx="18" fill={light ? '#F7F4EF' : '#0B2530'} />
+  <path d="M25 20.6v22.8a2 2 0 0 0 3 1.7l18.6-11.4a2 2 0 0 0 0-3.4L28 18.9a2 2 0 0 0-3 1.7z" fill={light ? '#0B2530' : '#F7F4EF'} />
+  <circle cx="47.5" cy="16.5" r="5.5" fill="#D9482B" />
+</svg>

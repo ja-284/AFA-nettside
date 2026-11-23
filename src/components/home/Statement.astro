@@ -1,0 +1,31 @@
+---
+/** Én stor setning som fades inn ord for ord mot scroll (se scripts/motion.ts). */
+const text = 'De fleste bedrifter har noe flott å vise frem, men lite tid til å filme det. Vi tar oss av filmingen, så dere kan ta dere av kundene.';
+const highlight: Record<string, string> = { 'filmingen,': 'accent', 'kundene.': 'accent-teal' };
+const words = text.split(' ');
+---
+<section id="intro" class="section tone-cream statement" aria-label="Introduksjon" data-motion="statement">
+  <div class="container">
+    <p class="statement-text" data-statement>
+      {words.map((w, i) => <>{i > 0 && ' '}<span class:list={['sw', highlight[w]]}>{w}</span></>)}
+    </p>
+  </div>
+</section>
+
+<style>
+  .statement {
+    padding-block: clamp(96px, 14vw, 200px);
+  }
+  .statement-text {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: clamp(2.05rem, 0.9rem + 4.9vw, 5.6rem);
+    font-weight: 650;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .sw {
+    display: inline;
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+/** Rolig, uendelig tekstbånd. Duplikatet er skjult for skjermlesere. */
+interface Props {
+  items: string[];
+  label: string;
+  tone?: 'coral' | 'navy' | 'cream';
+  speed?: number;
+}
+const { items, label, tone = 'navy', speed = 48 } = Astro.props;
+---
+<div class:list={['marquee', `marquee-${tone}`]} style={`--speed: ${speed}s`}>
+  <p class="sr-only">{label}: {items.join(', ')}.</p>
+  <div class="marquee-track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <ul class="marquee-group">
+        {items.map((item) => (
+          <li>{item}<span class="dot">✺</span></li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    padding-block: clamp(22px, 3.2vw, 40px);
+    background: var(--navy);
+    color: var(--cream);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-coral {
+    background: var(--coral-strong);
+    color: var(--white);
+  }
+  .marquee-cream {
+    background: var(--cream);
+    color: var(--navy);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--speed) linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-group {
+    display: flex;
+    flex: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .marquee-group li {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 44px);
+    padding-right: clamp(20px, 3vw, 44px);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1rem + 4.2vw, 5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .dot {
+    font-size: 0.5em;
+    color: var(--sun);
+  }
+  .marquee-coral .dot {
+    color: var(--navy);
+  }
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      mask-image: none;
+    }
+    .marquee-track {
+      animation: none;
+      width: auto;
+    }
+    .marquee-group:last-child {
+      display: none;
+    }
+    .marquee-group {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 0.6rem;
+      padding-inline: var(--gutter);
+    }
+    .marquee-group li {
+      font-size: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+    }
+  }
+</style>

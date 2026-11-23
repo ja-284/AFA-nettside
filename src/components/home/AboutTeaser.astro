@@ -1,0 +1,35 @@
+---
+import { site } from '../../config/site';
+import Button from '../ui/Button.astro';
+import Photo from '../ui/Photo.astro';
+---
+<section class="section tone-cream" aria-labelledby="om-title">
+  <div class="container about-grid">
+    <div class="about-media" data-reveal>
+      <Photo slot="group" ratio="4:5" parallax sizes="(min-width: 900px) 45vw, 90vw" label="Gruppebilde kommer" />
+    </div>
+    <div class="about-copy stack" style="--stack: 1.5rem">
+      <p class="eyebrow" data-reveal>Om oss</p>
+      <h2 id="om-title" class="title" data-reveal style="--i: 1">Hvem er vi?</h2>
+      <p class="lead" data-reveal style="--i: 2">Vi er en gjeng elever på Fornebu som driver {site.name} gjennom valgfaget «{site.course}».</p>
+      <p class="muted" data-reveal style="--i: 3">Vi lager det vi selv ser på hver dag – korte, ærlige videoer – for bedriftene rundt oss. Vi lærer mye, vi jobber raskt, og vi bryr oss om at det blir bra.</p>
+      <div data-reveal style="--i: 4"><Button href="/om-oss/" variant="ghost">Møt gruppen</Button></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    gap: clamp(36px, 6vw, 96px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .about-media {
+    max-width: 560px;
+  }
+</style>

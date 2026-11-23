@@ -1,0 +1,42 @@
+---
+import type { Option } from '../../lib/forms';
+/** Gruppe med valgkort (radio) eller avkrysningsbokser, med legend og feilmelding. */
+interface Props {
+  name: string;
+  legend: string;
+  options: (Option & { desc?: string })[];
+  multiple?: boolean;
+  required?: boolean;
+  layout?: 'list' | 'cols-2' | 'chips';
+  hint?: string;
+  idPrefix?: string;
+  legendClass?: string;
+}
+const { name, legend, options, multiple = false, required = false, layout = 'cols-2', hint, idPrefix = 'f', legendClass } = Astro.props;
+const id = `${idPrefix}-${name}`;
+const describedBy = [hint && `${id}-hint`, `${id}-error`].filter(Boolean).join(' ');
+---
+<fieldset class="field" data-field-wrap={name} aria-describedby={describedBy} id={id} tabindex="-1">
+  <legend class:list={['fieldset-legend', legendClass]}>
+    {legend}{!required && <span class="optional"> (valgfritt)</span>}
+  </legend>
+  {hint && <p class="field-hint" id={`${id}-hint`}>{hint}</p>}
+  <div class:list={['choices', layout !== 'list' && layout]}>
+    {options.map((o) => (
+      <label class="choice">
+        <input
+          type={multiple ? 'checkbox' : 'radio'}
+          name={multiple ? `${name}[]` : name}
+          value={o.value}
+          required={!multiple && required}
+          data-field={name}
+        />
+        <span>
+          <span class="choice-title">{o.label}</span>
+          {o.desc && <span class="choice-desc">{o.desc}</span>}
+        </span>
+      </label>
+    ))}
+  </div>
+  <p class="field-error" id={`${id}-error`} aria-live="polite"></p>
+</fieldset>

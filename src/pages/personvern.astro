@@ -1,0 +1,72 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../config/site';
+const m = site.retentionMonths;
+---
+<LegalLayout title="Personvern" eyebrow="Personvernerklæring" description={`Slik behandler ${site.name} personopplysninger: hva vi lagrer, hvorfor, hvor lenge og hvilke rettigheter du har.`} path="/personvern/" og="personvern" updated="23. november 2026" draft="Utkast – gruppen og ansvarlig lærer må gå gjennom">
+  <p class="lead">Kort fortalt: Vi lagrer bare det du selv sender oss gjennom skjemaene, vi bruker det bare til å svare deg, og vi sletter det senest {m} måneder etter siste kontakt. Vi bruker ingen sporingskapsler.</p>
+
+  <h2>Hvem er ansvarlig?</h2>
+  <p>{site.name} er en elevbedrift drevet av elever på Fornebu gjennom valgfaget «{site.course}». {site.name} er behandlingsansvarlig for opplysningene som samles inn på denne nettsiden. Har du spørsmål, kan du skrive til <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
+
+  <h2>Hvilke opplysninger samler vi inn?</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th scope="col">Når</th><th scope="col">Hva vi lagrer</th><th scope="col">Hvorfor</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bestilling</td>
+          <td>Bedriftens navn, bransje, område, størrelse, nettside, hva dere ønsker, kontaktperson, e-post, telefon (valgfritt) og foretrukket kontaktmåte.</td>
+          <td>For å svare på bestillingen og avtale filming. Grunnlag: avtale (GDPR art. 6 nr. 1 b) og samtykke.</td>
+        </tr>
+        <tr>
+          <td>Vurdering</td>
+          <td>Antall stjerner, teksten din og eventuelt navn og bedrift.</td>
+          <td>For å vise vurderingen på nettsiden. Grunnlag: samtykke (art. 6 nr. 1 a).</td>
+        </tr>
+        <tr>
+          <td>Kontaktskjema</td>
+          <td>Navn, e-post, telefon (valgfritt) og meldingen din.</td>
+          <td>For å svare deg. Grunnlag: berettiget interesse (art. 6 nr. 1 f).</td>
+        </tr>
+        <tr>
+          <td>Spamvern</td>
+          <td>En kortvarig, enveis-kryptert (hashet) versjon av IP-adressen din, og et svar fra Cloudflare Turnstile.</td>
+          <td>For å stoppe automatiserte innsendinger. Hashen brukes i maks én time og slettes deretter.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Vi samler ikke inn mer enn vi trenger, og vi selger eller deler aldri opplysningene med andre for markedsføring.</p>
+
+  <h2>Hvor lenge lagrer vi opplysningene?</h2>
+  <p>Bestillinger og henvendelser slettes senest {m} måneder etter siste kontakt med deg. Publiserte vurderinger ligger ute til du ber oss fjerne dem. Vurderinger som ikke blir publisert, slettes senest {m} måneder etter at de ble sendt inn.</p>
+
+  <h2>Hvem behandler opplysningene for oss?</h2>
+  <p>Nettsiden, databasen og spamvernet driftes av <strong>Cloudflare</strong> (Cloudflare Pages, D1 og Turnstile). Cloudflare er vår databehandler og behandler opplysningene på våre vegne etter en databehandleravtale. Cloudflare er et amerikansk selskap og er sertifisert under EU–US Data Privacy Framework. Vi ber om at databasen lagres i Europa.</p>
+  <p>Hvis vi har slått på e-postvarsling, sendes en kopi av bestillingen via <strong>Resend</strong> til gruppens e-post og som kvittering til deg. Resend er da også databehandler.</p>
+
+  <h2>Informasjonskapsler og sporing</h2>
+  <p>Vi bruker ingen informasjonskapsler for sporing eller markedsføring, og vi bruker ikke Google Analytics, Meta-piksel eller lignende. Derfor ser du heller ikke noe samtykkebanner.</p>
+  <p>Det eneste unntaket er en nødvendig informasjonskapsel for gruppens innlogging på administrasjonssiden. Den settes bare for de som logger inn der.</p>
+  <p>Hvis vi slår på besøksstatistikk, bruker vi Cloudflare Web Analytics, som ikke bruker informasjonskapsler og ikke sporer deg på tvers av nettsteder.</p>
+  <p>Skriftene på siden ligger på vår egen server, så nettleseren din kontakter ikke Google eller andre for å hente dem.</p>
+
+  <h2>Dine rettigheter</h2>
+  <p>Du har rett til å</p>
+  <ul>
+    <li>få innsyn i hvilke opplysninger vi har om deg,</li>
+    <li>få rettet feil,</li>
+    <li>få opplysningene slettet,</li>
+    <li>trekke tilbake et samtykke, for eksempel til at en vurdering vises,</li>
+    <li>protestere mot eller be om begrensning av behandlingen, og</li>
+    <li>få utlevert opplysningene dine (dataportabilitet).</li>
+  </ul>
+  <p>Send en e-post til <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>, så svarer vi så raskt vi kan og senest innen 30 dager.</p>
+  <p>Mener du at vi ikke behandler opplysningene dine riktig, kan du klage til <a href="https://www.datatilsynet.no/" rel="noopener">Datatilsynet</a>. Vi setter pris på om du tar kontakt med oss først.</p>
+
+  <h2>Endringer</h2>
+  <p>Endrer vi denne erklæringen, oppdaterer vi datoen øverst.</p>
+</LegalLayout>

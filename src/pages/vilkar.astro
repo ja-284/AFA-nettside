@@ -1,0 +1,40 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../config/site';
+---
+<LegalLayout title="Vilkår" eyebrow="Vilkår for oppdrag" description={`Vilkår for oppdrag med ${site.name}: gratis prøve, månedlige pakker, rettigheter, endringer og avbestilling.`} path="/vilkar/" og="vilkar" updated="23. november 2026" draft="Utkast – gruppen må gå gjennom og bekrefte">
+  <p class="lead">Disse vilkårene gjelder når en bedrift bestiller video eller bilder fra {site.name}. Vi har prøvd å gjøre dem korte og forståelige.</p>
+
+  <h2>1. Om oss</h2>
+  <p>{site.name} er en elevbedrift drevet av elever på Fornebu gjennom valgfaget «{site.course}». Vi filmer med mobil og redigerer selv. Vi er ikke et profesjonelt produksjonsselskap, og vi sier fra på forhånd hvis et oppdrag er noe vi ikke kan levere godt nok.</p>
+
+  <h2>2. Gratis prøve</h2>
+  <p>Den gratis prøven består av {site.trial.clips} korte klipp på {site.trial.lengthMin}–{site.trial.lengthMax} sekunder fra én filmøkt. Den koster ingenting og forplikter ikke bedriften til noe.</p>
+
+  <h2>3. Månedlige pakker</h2>
+  <p>Innholdet i hver pakke står på siden <a href="/tjenester/">Tjenester og priser</a>. Pris og omfang avtales skriftlig (for eksempel på e-post) før vi starter. Det er ingen bindingstid. Avtalen kan sies opp når som helst og stopper ved slutten av måneden den sies opp i.</p>
+
+  <h2>4. Levering og endringer</h2>
+  <p>Vi leverer ferdige filer {site.deliveryTime}, med mindre noe annet er avtalt. Bedriften får se materialet før levering. En runde med mindre endringer per klipp er inkludert, for eksempel ny tekst, annen musikk eller et annet utsnitt.</p>
+
+  <h2>5. Rettigheter</h2>
+  <p>Bedriften får bruksrett til alt ferdig materiale vi leverer, til egen markedsføring i alle kanaler. {site.name} kan bare vise materialet i egen portefølje hvis bedriften har sagt ja til det. Råopptak leveres ikke, med mindre det er avtalt.</p>
+
+  <h2>6. Personer i videoene</h2>
+  <p>Vi spør alltid før vi filmer ansatte eller kunder. Bedriften er ansvarlig for å ha samtykke fra ansatte som er med, og for å si fra hvis noen ikke ønsker å bli filmet. Vi filmer ikke kunder som ikke har sagt ja.</p>
+
+  <h2>7. Musikk</h2>
+  <p>Vi bruker lisensfri musikk eller lyder som er tilgjengelige i plattformene (for eksempel Instagram og TikTok). Noen lyder kan bare brukes direkte i plattformen. Vi forklarer hva som gjelder ved levering.</p>
+
+  <h2>8. Avlysning</h2>
+  <p>Må en filmøkt flyttes, gir vi hverandre beskjed så tidlig som mulig, helst minst 24 timer før. Da finner vi en ny dag uten kostnad.</p>
+
+  <h2>9. Betaling</h2>
+  <p>Betaling skjer mot faktura etter levering, med mindre noe annet er avtalt. Fakturering skjer i tråd med reglene for elevbedrifter.</p>
+
+  <h2>10. Ansvar</h2>
+  <p>Vi gjør vårt beste for at alt blir bra. Bedriften er selv ansvarlig for hva som publiseres i egne kanaler. Vårt ansvar er begrenset til det som er betalt for det aktuelle oppdraget.</p>
+
+  <h2>11. Kontakt</h2>
+  <p>Spørsmål om vilkårene? Skriv til <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
+</LegalLayout>

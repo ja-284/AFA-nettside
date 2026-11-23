@@ -1,0 +1,120 @@
+---
+/** Illustrasjon av et reel i en telefon (brukes i hero). Rent dekorativ. */
+import Photo from '../ui/Photo.astro';
+import Icon from '../ui/Icon.astro';
+---
+<div class="reel" aria-hidden="true">
+  <Photo slot="screenFilm" label={false} class="reel-bg" ratio="9:19.2" />
+  <div class="reel-ui">
+    <div class="reel-top">
+      <span class="seg is-done"></span><span class="seg is-on"></span><span class="seg"></span>
+    </div>
+    <span class="rec"><span class="rec-dot"></span>REC 00:15</span>
+    <div class="reel-side">
+      <span><Icon name="heart" size={20} /></span>
+      <span><Icon name="chat" size={20} /></span>
+      <span><Icon name="send" size={20} /></span>
+    </div>
+    <div class="reel-caption">
+      <span class="reel-handle">din.bedrift</span>
+      <span class="reel-text">Ferske boller, rett fra ovnen.</span>
+      <span class="reel-sound"><Icon name="sound" size={12} />Original lyd</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .reel {
+    position: absolute;
+    inset: 0;
+    color: var(--white);
+  }
+  .reel :global(.reel-bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto !important;
+    --photo-radius: 0;
+  }
+  .reel-ui {
+    position: absolute;
+    inset: 0;
+    padding: 14% 7% 8%;
+    background: linear-gradient(180deg, rgb(11 37 48 / 0.28), transparent 25%, transparent 55%, rgb(11 37 48 / 0.7));
+    font-size: clamp(9px, 0.85vw, 12px);
+  }
+  .reel-top {
+    display: flex;
+    gap: 4px;
+  }
+  .seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: rgb(255 255 255 / 0.4);
+    overflow: hidden;
+  }
+  .seg.is-done {
+    background: var(--white);
+  }
+  .seg.is-on {
+    background: linear-gradient(90deg, var(--white) 60%, rgb(255 255 255 / 0.4) 60%);
+  }
+  .rec {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 4px 9px;
+    border-radius: 99px;
+    background: rgb(11 37 48 / 0.55);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .rec-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--coral);
+    animation: blink 1.4s steps(2, start) infinite;
+  }
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+  .reel-side {
+    position: absolute;
+    right: 7%;
+    bottom: 26%;
+    display: grid;
+    gap: 14px;
+  }
+  .reel-caption {
+    position: absolute;
+    left: 7%;
+    right: 22%;
+    bottom: 7%;
+    display: grid;
+    gap: 3px;
+  }
+  .reel-handle {
+    font-weight: 700;
+  }
+  .reel-text {
+    font-size: 1.1em;
+    line-height: 1.3;
+  }
+  .reel-sound {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.85;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rec-dot {
+      animation: none;
+    }
+  }
+</style>

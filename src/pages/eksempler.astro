@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PortfolioCard from '../components/PortfolioCard.astro';
+import ReelDemo from '../components/ReelDemo.astro';
+import SectionHead from '../components/ui/SectionHead.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { getPortfolio, categoryName } from '../lib/portfolio';
+
+const crumbs = [
+  { name: 'Hjem', href: '/' },
+  { name: 'Eksempler', href: '/eksempler/' },
+];
+const items = await getPortfolio();
+const cats = [...new Set(items.map((i) => i.data.category))];
+---
+<BaseLayout title="Eksempler" description="Reels og bilder vi har laget for lokale bedrifter på Fornebu, Snarøya og Lysaker – og et eksempel på hvordan et reel er bygget opp." og="eksempler" crumbs={crumbs}>
+  <PageHero eyebrow="Eksempler" title="Det vi har laget" lead="Her samler vi klipp og bilder vi har laget for bedrifter i nabolaget. Vi viser bare arbeid som bedriftene har sagt ja til." crumbs={crumbs} />
+
+  <section class="section tone-cream" aria-labelledby="galleri-title" style="padding-top: 0">
+    <div class="container">
+      <h2 id="galleri-title" class="sr-only">Galleri</h2>
+      {items.length === 0 ? (
+        <div class="empty" data-reveal>
+          <span class="empty-icon" aria-hidden="true"><Icon name="play" size={28} /></span>
+          <p class="empty-title">Våre første klipp legges ut her.</p>
+          <p class="muted">Vi har akkurat startet, og vi vil heller vise ingenting enn noe som ikke er ekte. Vil din bedrift være blant de første? Den første prøven er gratis.</p>
+          <div class="btn-row">
+            <Button href="/bestill/?pakke=prove">Bestill gratis prøve</Button>
+            <Button href="#reel-format" variant="ghost" icon="none">Se hvordan et reel er bygget opp</Button>
+          </div>
+        </div>
+      ) : (
+        <>
+          {cats.length > 1 && (
+            <div class="filters" role="group" aria-label="Filtrer etter bransje" data-portfolio-filter>
+              <button type="button" class="chip filter is-on" aria-pressed="true" data-filter="alle">Alle</button>
+              {cats.map((c) => <button type="button" class="chip filter" aria-pressed="false" data-filter={c}>{categoryName(c)}</button>)}
+            </div>
+          )}
+          <p class="sr-only" aria-live="polite" data-filter-status></p>
+          <ul class="grid">
+            {items.map((item, i) => (
+              <li data-category={item.data.category} data-reveal style={`--i: ${i % 4}`}><PortfolioCard item={item} sizes="(min-width: 1080px) 300px, (min-width: 640px) 45vw, 90vw" /></li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+  </section>
+
+  <section id="reel-format" class="section tone-mist" aria-labelledby="reel-title">
+    <div class="container">
+      <SectionHead eyebrow="Eksempelformat – ikke kundearbeid" title="Slik ser et reel ut" id="reel-title" split lead="Et typisk reel er mellom 15 og 30 sekunder langt og filmet stående i 9:16. Slik bygger vi det opp." />
+      <ReelDemo />
+    </div>
+  </section>
+
+  <FinalCta />
+
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Visning av eksempel">
+    <div class="lb-inner">
+      <button type="button" class="lb-close" data-lightbox-close aria-label="Lukk"><Icon name="close" size={22} /></button>
+      <div class="lb-media" data-lightbox-media></div>
+      <p class="lb-title" data-lightbox-title></p>
+    </div>
+  </dialog>
+</BaseLayout>
+
+<style>
+  .empty-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--cream);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .filter {
+    min-height: 44px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .filter.is-on {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--cream);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    gap: clamp(14px, 2vw, 24px);
+    padding: 0;
+    list-style: none;
+  }
+  .lightbox {
+    width: min(92vw, 480px);
+    max-height: 92dvh;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-lg);
+    background: var(--navy);
+    color: var(--cream);
+    overflow: hidden;
+  }
+  .lightbox::backdrop {
+    background: rgb(11 37 48 / 0.82);
+    backdrop-filter: blur(6px);
+  }
+  .lightbox[open] {
+    animation: lb-in 400ms var(--ease-out);
+  }
+  @keyframes lb-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  .lb-inner {
+    position: relative;
+  }
+  .lb-media :global(video),
+  .lb-media :global(img) {
+    width: 100%;
+    max-height: 80dvh;
+    object-fit: contain;
+    background: #000;
+  }
+  .lb-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(247 244 239 / 0.9);
+    color: var(--navy);
+  }
+  .lb-title {
+    padding: 1rem 1.25rem 1.25rem;
+    font-weight: 600;
+  }
+</style>

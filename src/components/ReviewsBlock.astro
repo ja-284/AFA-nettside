@@ -1,0 +1,96 @@
+---
+/**
+ * Vurderinger. Statisk HTML viser en ærlig tom tilstand. Når det finnes godkjente vurderinger,
+ * setter serveren (functions/index.ts og functions/vurderinger/index.ts) inn kortene her.
+ */
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+
+interface Props {
+  mode: 'home' | 'page';
+}
+const { mode } = Astro.props;
+---
+<div class="reviews" data-carousel={mode === 'home' ? '' : undefined}>
+  <div class="reviews-stats" data-reviews-stats hidden></div>
+
+  <div class="reviews-viewport" data-carousel-track>
+    <ul class:list={['reviews-list', mode === 'page' && 'is-grid']} data-reviews-list hidden></ul>
+  </div>
+
+  {mode === 'home' && (
+    <div class="reviews-controls" data-reviews-has hidden>
+      <button type="button" class="round-btn" data-carousel-prev aria-label="Forrige vurdering"><Icon name="arrow-left" size={20} /></button>
+      <button type="button" class="round-btn" data-carousel-next aria-label="Neste vurdering"><Icon name="arrow" size={20} /></button>
+      <a class="link-arrow" href="/vurderinger/">Alle vurderinger</a>
+    </div>
+  )}
+
+  <div class="empty" data-reviews-empty>
+    <p class="empty-title">Våre første kunder kommer snart. Vil du være en av dem?</p>
+    <p class="muted">Vi har ikke betalende kunder ennå, og vi dikter ikke opp vurderinger. Har vi laget noe for dere, setter vi stor pris på en ærlig tilbakemelding.</p>
+    <div class="btn-row">
+      <Button href="/bestill/?pakke=prove">Bestill gratis prøve</Button>
+      {mode === 'home' ? <Button href="/vurderinger/#skriv" variant="ghost" icon="none">Skriv en vurdering</Button> : <Button href="#skriv" variant="ghost" icon="none">Skriv den første</Button>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .reviews {
+    display: grid;
+    gap: 2rem;
+  }
+  .reviews-viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+  }
+  .reviews-viewport::-webkit-scrollbar {
+    display: none;
+  }
+  .reviews-list {
+    display: flex;
+    gap: clamp(14px, 2vw, 24px);
+    padding: 8px 0 24px;
+    margin: 0;
+  }
+  .reviews-list.is-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  }
+  .reviews-list.is-grid :global(.review-card) {
+    flex: none;
+  }
+  .reviews-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .reviews-controls .link-arrow {
+    margin-left: auto;
+  }
+  .round-btn {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 50%;
+    background: transparent;
+    transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+  }
+  .round-btn:hover {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .round-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    background: transparent;
+    color: inherit;
+  }
+</style>

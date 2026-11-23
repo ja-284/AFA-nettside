@@ -1,0 +1,17 @@
+---
+/** Seksjon med fargetone, valgfri tekstur og et tydelig budskap. */
+interface Props {
+  id?: string;
+  tone?: 'cream' | 'mist' | 'white' | 'dark' | 'petrol';
+  grain?: boolean;
+  tight?: boolean;
+  class?: string;
+  labelledby?: string;
+  [key: string]: unknown;
+}
+const { id, tone = 'cream', grain = false, tight = false, class: cls, labelledby, ...rest } = Astro.props;
+---
+<section id={id} class:list={['section', `tone-${tone}`, tight && 'section-tight', cls]} aria-labelledby={labelledby} {...rest}>
+  {grain && <div class="grain" aria-hidden="true" />}
+  <slot />
+</section>

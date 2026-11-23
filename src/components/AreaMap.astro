@@ -1,0 +1,82 @@
+---
+/** Stilisert kart over området vi dekker. Ikke geografisk nøyaktig – bare en enkel illustrasjon. */
+---
+<figure class="map">
+  <svg viewBox="0 0 600 440" role="img" aria-labelledby="map-title map-desc">
+    <title id="map-title">Stilisert kart over Fornebu, Snarøya og Lysaker</title>
+    <desc id="map-desc">Fornebu-halvøya stikker ut i Oslofjorden. Snarøya ligger helt sør på halvøya, og Lysaker ligger der halvøya møter fastlandet, mot Oslo.</desc>
+    <defs>
+      <pattern id="waves" width="28" height="14" patternUnits="userSpaceOnUse">
+        <path d="M0 7c4 0 4-4 7-4s3 4 7 4 4-4 7-4 3 4 7 4" fill="none" stroke="#1B8A9C" stroke-opacity=".14" stroke-width="1.2" />
+      </pattern>
+    </defs>
+    <rect width="600" height="440" rx="28" fill="#DCEBEE" />
+    <rect width="600" height="440" rx="28" fill="url(#waves)" />
+    <!-- Fastlandet -->
+    <path d="M0 0h600v96c-30 6-52 22-86 20-30-2-44-24-78-22-30 2-40 26-70 30-26 3-44-10-66-6-30 6-40 30-70 34C196 156 150 120 120 132 80 148 60 118 0 126z" fill="#F7F4EF" />
+    <!-- Fornebu-halvøya med Snarøya -->
+    <path d="M246 148c-20 30-36 56-30 92 5 30-14 52-6 84 8 30 2 58 24 72 24 16 58 6 68-18 10-22-6-40 4-60 12-24 36-26 40-56 4-28-22-44-24-72-2-24 10-38-6-52-18-14-44-10-70 10z" fill="#F7F4EF" />
+    <path d="M220 300c-14 10-30 30-22 52s34 26 48 12c14-14 2-34 8-48" fill="none" stroke="#14485A" stroke-opacity=".12" stroke-width="1.5" stroke-dasharray="4 6" />
+    <!-- Små holmer -->
+    <ellipse cx="420" cy="300" rx="34" ry="16" fill="#F7F4EF" />
+    <ellipse cx="480" cy="236" rx="18" ry="9" fill="#F7F4EF" />
+    <ellipse cx="128" cy="300" rx="22" ry="11" fill="#F7F4EF" />
+    <!-- Elv ved Lysaker -->
+    <path d="M410 0c-6 24 8 40 0 62-6 16 2 34 0 52" fill="none" stroke="#1B8A9C" stroke-opacity=".5" stroke-width="5" stroke-linecap="round" />
+    <!-- Område vi dekker -->
+    <ellipse cx="300" cy="230" rx="170" ry="200" fill="#D9482B" fill-opacity=".06" stroke="#D9482B" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="6 8" />
+    <!-- Nåler -->
+    <g class="pin">
+      <circle cx="292" cy="196" r="22" fill="#D9482B" fill-opacity=".16" />
+      <circle cx="292" cy="196" r="8" fill="#C43D21" stroke="#fff" stroke-width="3" />
+      <text x="292" y="168" text-anchor="middle">Fornebu</text>
+    </g>
+    <g class="pin">
+      <circle cx="262" cy="362" r="22" fill="#1B8A9C" fill-opacity=".18" />
+      <circle cx="262" cy="362" r="8" fill="#13707F" stroke="#fff" stroke-width="3" />
+      <text x="262" y="408" text-anchor="middle">Snarøya</text>
+    </g>
+    <g class="pin">
+      <circle cx="402" cy="118" r="22" fill="#E9A92B" fill-opacity=".25" />
+      <circle cx="402" cy="118" r="8" fill="#0B2530" stroke="#fff" stroke-width="3" />
+      <text x="436" y="152" text-anchor="start">Lysaker</text>
+    </g>
+    <text class="muted-label" x="560" y="60" text-anchor="end">Oslo →</text>
+    <text class="muted-label" x="40" y="60">Bærum</text>
+    <text class="water-label" x="500" y="380" text-anchor="middle">Oslofjorden</text>
+  </svg>
+  <figcaption class="small muted">Stilisert kart. Vi dekker Fornebu, Snarøya og Lysaker – og resten av Bærum og Oslo etter avtale.</figcaption>
+</figure>
+
+<style>
+  .map {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .map svg {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .map text {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 750;
+    fill: #0b2530;
+    letter-spacing: -0.01em;
+  }
+  .map .muted-label {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    fill: #3e5761;
+  }
+  .map .water-label {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 500;
+    fill: #13707f;
+  }
+</style>

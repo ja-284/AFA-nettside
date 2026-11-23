@@ -1,0 +1,26 @@
+# Cloudflare Pages-konfigurasjon for AFA Videos.
+# Se DEPLOY.md for fullstendig oppskrift.
+name = "afa-videos"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-11-01"
+
+# Ikke-hemmelige innstillinger. Hemmeligheter (TURNSTILE_SECRET, ADMIN_PASSWORD,
+# RESEND_API_KEY, NOTIFY_EMAIL) settes med `npx wrangler pages secret put NAVN`
+# eller i Cloudflare-dashbordet – aldri her.
+[vars]
+# Avsenderadresse for e-post via Resend. Må være på et domene du har verifisert i Resend.
+MAIL_FROM = "AFA Videos <onboarding@resend.dev>"
+# Ekstra opprinnelser (kommaseparert) som får sende skjemaer, f.eks. "https://www.afavideos.no".
+# Sidens egen adresse er alltid tillatt.
+ALLOWED_ORIGINS = ""
+# Cloudflare Access (anbefalt for /admin). Fyll inn når Access er satt opp – se DEPLOY.md.
+CF_ACCESS_TEAM_DOMAIN = ""
+CF_ACCESS_AUD = ""
+
+# D1-database for bestillinger, vurderinger og kontakthenvendelser.
+# Bytt database_id med ID-en du får fra `npx wrangler d1 create afa-videos`.
+[[d1_databases]]
+binding = "DB"
+database_name = "afa-videos"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

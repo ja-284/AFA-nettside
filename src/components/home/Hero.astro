@@ -1,0 +1,242 @@
+---
+import { site } from '../../config/site';
+import Button from '../ui/Button.astro';
+import PhoneFrame from '../ui/PhoneFrame.astro';
+import Photo from '../ui/Photo.astro';
+import ReelScreen from '../screens/ReelScreen.astro';
+
+const lines = [
+  ['Dere', 'er', 'gode'],
+  ['på', 'noe.'],
+  ['Vi', 'filmer', 'det.'],
+];
+const accent = new Set(['filmer']);
+let n = 0;
+---
+<section class="hero tone-cream" aria-labelledby="hero-title" data-motion="hero">
+  <div class="blobs" data-hero-blobs aria-hidden="true">
+    <span class="blob" style="--c: rgb(27 138 156 / 0.5); --size: 62vmax; top: -28%; left: -18%; --t: 30s; --dx: 8%; --dy: 6%"></span>
+    <span class="blob" style="--c: rgb(233 169 43 / 0.45); --size: 46vmax; top: 6%; right: -16%; --t: 24s; --dx: -9%; --dy: 5%"></span>
+    <span class="blob" style="--c: rgb(217 72 43 / 0.28); --size: 42vmax; bottom: -30%; left: 26%; --t: 34s; --dx: 6%; --dy: -8%"></span>
+    <span class="blob" style="--c: rgb(127 200 169 / 0.5); --size: 30vmax; bottom: 4%; left: -8%; --t: 22s; --dx: 10%; --dy: -4%"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="container hero-inner">
+    <p class="eyebrow hero-eyebrow">Reels og bilder · {site.areas.core.join(' · ')}</p>
+    <h1 id="hero-title" class="display hero-title" aria-label="Dere er gode på noe. Vi filmer det.">
+      {lines.map((line) => (
+        <span class="hero-line" aria-hidden="true">
+          {line.map((word, i) => (
+            <>{i > 0 && ' '}<span class="w"><span class:list={['wi', accent.has(word) && 'accent']} style={`--n: ${n++}`}>{word}</span></span></>
+          ))}{' '}
+        </span>
+      ))}
+    </h1>
+
+    <div class="hero-bottom">
+      <div class="hero-copy">
+        <p class="lead hero-lead">Vi er elever på Fornebu som lager reels og bilder for lokale bedrifter. Ung energi, lokal forståelse, ingen binding.</p>
+        <div class="btn-row hero-ctas">
+          <Button href="/bestill/?pakke=prove" size="lg" magnetic>Bestill gratis prøve</Button>
+          <Button href="#slik-fungerer-det" variant="ghost" size="lg" icon="play">Se hvordan det funker</Button>
+        </div>
+      </div>
+
+      <div class="hero-media" data-hero-media>
+        <Photo slot="hero" eager parallax class="hero-photo" sizes="(min-width: 1024px) 40vw, 90vw" widths={[640, 960, 1280, 1600]} />
+        <div class="hero-phone" data-hero-phone>
+          <PhoneFrame tilt={-6}><ReelScreen /></PhoneFrame>
+        </div>
+      </div>
+    </div>
+
+    <a class="scroll-cue" href="#intro" aria-label="Scroll videre til introduksjonen">
+      <span class="scroll-cue-text" aria-hidden="true">Scroll</span>
+      <span class="scroll-cue-line" aria-hidden="true"></span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(var(--header-h) + clamp(28px, 6vw, 72px));
+    padding-bottom: clamp(48px, 6vw, 88px);
+    background:
+      radial-gradient(120% 70% at 50% 0%, #fbf8f3 0%, transparent 60%),
+      var(--cream);
+  }
+  .hero-inner {
+    position: relative;
+    display: grid;
+    gap: clamp(20px, 3vw, 36px);
+  }
+  .hero-eyebrow {
+    animation: fade-up 700ms var(--ease-out) both;
+  }
+  .hero-title {
+    display: grid;
+    margin-left: -0.04em;
+    line-height: 0.94;
+  }
+  .hero-line {
+    display: block;
+  }
+  .w {
+    display: inline-block;
+    overflow: hidden;
+    /* plass til ringen over Å og en liten luft under */
+    padding: 0.1em 0.04em 0.02em;
+    margin: -0.1em -0.04em -0.02em;
+    vertical-align: top;
+  }
+  .wi {
+    display: inline-block;
+    animation: word-in 900ms var(--ease-out) both;
+    animation-delay: calc(120ms + var(--n) * 70ms);
+  }
+  @keyframes word-in {
+    from {
+      transform: translate3d(0, 105%, 0) rotate(3deg);
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+    }
+  }
+  .hero-bottom {
+    display: grid;
+    gap: clamp(36px, 6vw, 64px);
+    margin-top: clamp(8px, 2vw, 24px);
+  }
+  .hero-copy {
+    display: grid;
+    gap: 1.75rem;
+    align-content: start;
+    animation: fade-up 800ms var(--ease-out) 650ms both;
+  }
+  .hero-lead {
+    color: var(--ink-soft);
+  }
+  .hero-ctas :global(.btn) {
+    flex: 1 1 auto;
+  }
+  .hero-media {
+    position: relative;
+    animation: fade-up 1000ms var(--ease-out) 800ms both;
+    margin-right: calc(var(--gutter) * -0.5);
+  }
+  .hero-media :global(.hero-photo) {
+    width: 78%;
+    margin-left: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .hero-media :global(.ph-label) {
+    left: auto;
+    bottom: auto;
+    top: 14px;
+    right: 14px;
+  }
+  .hero-phone {
+    position: absolute;
+    left: 0;
+    bottom: -8%;
+    z-index: 2;
+  }
+  .hero-phone :global(.phone) {
+    --w: clamp(150px, 40vw, 250px);
+  }
+  .scroll-cue {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      min-height: 100svh;
+    }
+    .hero-bottom {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      align-items: start;
+      margin-top: 0;
+    }
+    .hero-copy {
+      padding-top: clamp(8px, 2vw, 32px);
+    }
+    .hero-ctas :global(.btn) {
+      flex: none;
+    }
+    .hero-media {
+      margin-right: 0;
+    }
+    .hero-media :global(.hero-photo) {
+      width: 78%;
+      aspect-ratio: 5 / 4 !important;
+    }
+    .hero-phone {
+      left: 2%;
+      bottom: -10%;
+    }
+    .hero-phone :global(.phone) {
+      --w: clamp(190px, 15vw, 260px);
+    }
+    .scroll-cue {
+      position: absolute;
+      left: 0;
+      bottom: calc(clamp(48px, 6vw, 88px) * -0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-size: var(--text-xs);
+      font-weight: 650;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink-soft);
+    }
+    .scroll-cue-line {
+      position: relative;
+      width: 64px;
+      height: 1.5px;
+      overflow: hidden;
+      background: var(--line-strong);
+    }
+    .scroll-cue-line::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--coral);
+      animation: cue 2.2s var(--ease-in-out) infinite;
+    }
+  }
+  @keyframes cue {
+    0% {
+      transform: translateX(-100%);
+    }
+    60%,
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wi {
+      animation-name: fade-in;
+    }
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+    }
+    .hero-eyebrow,
+    .hero-copy,
+    .hero-media {
+      animation-name: fade-in;
+    }
+    .scroll-cue-line::after {
+      animation: none;
+    }
+  }
+</style>

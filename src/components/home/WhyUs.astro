@@ -1,0 +1,129 @@
+---
+import { site } from '../../config/site';
+import Icon from '../ui/Icon.astro';
+import SectionHead from '../ui/SectionHead.astro';
+
+const points = [
+  { icon: 'eye' as const, title: 'Ungt blikk', text: 'Vi scroller selv hver dag og vet hva som får folk til å stoppe opp i feeden.' },
+  { icon: 'pin' as const, title: 'Vi er lokale', text: 'Vi er naboene deres. Kort vei, lav terskel og god kjennskap til nabolaget.' },
+  { icon: 'unlock' as const, title: 'Ingen binding', text: 'Dere kan stoppe når dere vil. Vi må gjøre oss fortjent til neste måned.' },
+  { icon: 'gift' as const, title: 'Gratis prøve først', text: `${site.trial.clips} klipp uten forpliktelser. Liker dere dem ikke, har dere ikke tapt noe.` },
+];
+// Bare ekte tall – ingen oppdiktede kundetall.
+const stats = [
+  { value: site.trial.clips, prefix: '', suffix: '', label: 'gratis prøveklipp' },
+  { value: 0, prefix: '', suffix: '', label: 'måneder bindingstid' },
+  { value: site.trial.lengthMax, prefix: `${site.trial.lengthMin}–`, suffix: '', label: 'sekunder per reel' },
+  { value: site.areas.core.length, prefix: '', suffix: '', label: 'nabolag vi starter i' },
+];
+---
+<section class="section tone-mist why" aria-labelledby="hvorfor-oss">
+  <div class="container">
+    <SectionHead eyebrow="Hvorfor oss" title="Vi er ikke et byrå. Det er poenget." id="hvorfor-oss" split lead="Vi er unge, raske og nysgjerrige, og vi bor her. Derfor starter vi med en gratis prøve, så dere kan se om vi passer før dere bestemmer dere." />
+
+    <ul class="why-grid">
+      {points.map((p, i) => (
+        <li class="why-item" data-reveal style={`--i: ${i}`}>
+          <span class="why-icon"><Icon name={p.icon} size={26} /></span>
+          <h3 class="why-title">{p.title}</h3>
+          <p class="muted">{p.text}</p>
+        </li>
+      ))}
+    </ul>
+
+    <dl class="stats">
+      {stats.map((s, i) => (
+        <div class="stat" data-reveal style={`--i: ${i}`}>
+          <dt class="stat-label">{s.label}</dt>
+          <dd class="stat-value">
+            <span aria-hidden="true">{s.prefix}<span data-count data-to={s.value}>{s.value}</span>{s.suffix}</span>
+            <span class="sr-only">{s.prefix}{s.value}{s.suffix}</span>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .why-grid {
+    display: grid;
+    gap: clamp(28px, 3vw, 40px);
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 640px) {
+    .why-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .why-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .why-item {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+    padding-top: 1.5rem;
+    border-top: 1.5px solid var(--line-strong);
+  }
+  .why-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: var(--white);
+    color: var(--coral-strong);
+    box-shadow: var(--shadow-sm);
+  }
+  .why-title {
+    font-size: var(--text-xl);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(12px, 2vw, 24px);
+    margin-top: clamp(56px, 8vw, 112px);
+  }
+  @media (min-width: 900px) {
+    .stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: clamp(20px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 1.4rem + 3vw, 4.4rem);
+    white-space: nowrap;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: var(--navy);
+  }
+  .stat:nth-child(1) .stat-value {
+    color: var(--coral-strong);
+  }
+  .stat:nth-child(3) .stat-value {
+    color: var(--teal-ink);
+  }
+  .stat-label {
+    color: var(--ink-soft);
+    font-weight: 560;
+    line-height: 1.35;
+  }
+</style>

@@ -1,0 +1,306 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PackageCards from '../components/PackageCards.astro';
+import Accordion from '../components/ui/Accordion.astro';
+import Icon from '../components/ui/Icon.astro';
+import Photo from '../components/ui/Photo.astro';
+import SectionHead from '../components/ui/SectionHead.astro';
+import Button from '../components/ui/Button.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { site } from '../config/site';
+import { faqLd } from '../lib/seo';
+
+const crumbs = [
+  { name: 'Hjem', href: '/' },
+  { name: 'Tjenester og priser', href: '/tjenester/' },
+];
+const included = [
+  'Planlegging av hva vi skal filme',
+  'Filming og foto hos dere, med mobil',
+  'Redigering, klipping og tekst på skjermen',
+  'Musikk eller lyd som passer plattformen',
+  'Ferdige filer i riktig format for Instagram, Facebook og TikTok',
+  'Bilder i høy oppløsning til nettside og trykk',
+  'En runde med endringer før levering',
+];
+const firstMeeting = [
+  { title: 'En kort prat', text: 'Vi møtes hos dere eller tar en telefon. Det tar 15–30 minutter.' },
+  { title: 'Hva vil dere vise?', text: 'Vi spør om produktene, kundene og hva som gjør dere spesielle. Dere trenger ikke ha en plan.' },
+  { title: 'Forslag fra oss', text: 'Vi foreslår tre idéer til klipp og en dag for filming.' },
+  { title: 'Ingen forpliktelser', text: 'Prøven er gratis. Etterpå bestemmer dere om dere vil fortsette.' },
+];
+---
+<BaseLayout title="Tjenester og priser" description="Reels på 15–30 sekunder og ferdig redigerte bilder for lokale bedrifter. Start med en gratis prøve på tre klipp. Ingen binding." og="tjenester" crumbs={crumbs} jsonLd={[faqLd(site.termsFaq)]}>
+  <PageHero eyebrow="Tjenester og priser" title="Reels, bilder og null binding" lead="Vi filmer, fotograferer og redigerer. Dere får ferdige filer som er klare til å legges ut. Start med en gratis prøve, og fortsett bare hvis dere liker det." crumbs={crumbs}>
+    <div class="btn-row" style="margin-top: 0.5rem">
+      <Button href="/bestill/?pakke=prove" magnetic>Bestill gratis prøve</Button>
+      <Button href="#pakker" variant="ghost" icon="none">Se pakkene</Button>
+    </div>
+  </PageHero>
+
+  <section class="section tone-white" aria-labelledby="reels-title">
+    <div class="container split">
+      <div data-reveal><Photo slot="reels" ratio="4:5" parallax sizes="(min-width: 900px) 42vw, 90vw" /></div>
+      <div class="stack" style="--stack: 1.25rem">
+        <p class="eyebrow" data-reveal>Reels</p>
+        <h2 id="reels-title" class="title-md" data-reveal style="--i: 1">Korte videoer som blir sett</h2>
+        <div class="prose muted" data-reveal style="--i: 2">
+          <p>Et reel er en kort, stående video på {site.trial.lengthMin}–{site.trial.lengthMax} sekunder. Det er et av formatene som blir sett mest på Instagram, Facebook og TikTok akkurat nå.</p>
+          <p>Vi filmer stående med mobil, klipper i takt med lyden og legger på tekst, så klippene fungerer også for dem som scroller uten lyd. De tre første sekundene er viktigst, så vi starter alltid med noe som fanger blikket.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tone-cream" aria-labelledby="bilder-title">
+    <div class="container split reverse">
+      <div data-reveal><Photo slot="photos" ratio="4:5" parallax sizes="(min-width: 900px) 42vw, 90vw" /></div>
+      <div class="stack" style="--stack: 1.25rem">
+        <p class="eyebrow" data-reveal>Bilder</p>
+        <h2 id="bilder-title" class="title-md" data-reveal style="--i: 1">Ekte bilder av det dere gjør</h2>
+        <div class="prose muted" data-reveal style="--i: 2">
+          <p>Vi tar bilder av maten, produktene, lokalene og folkene som jobber der – i naturlig lys og uten oppstilte smil.</p>
+          <p>Dere får bildene redigert og klare til bruk i feeden, i stories, på nettsiden, i menyen eller på plakater.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tone-mist" aria-labelledby="inkludert-title">
+    <div class="container two-col">
+      <div class="stack" style="--stack: 1.25rem">
+        <p class="eyebrow" data-reveal>Inkludert</p>
+        <h2 id="inkludert-title" class="title-md" data-reveal style="--i: 1">Dette får dere alltid</h2>
+        <p class="muted" data-reveal style="--i: 2">Uansett pakke gjør vi hele jobben – fra idé til ferdig fil.</p>
+      </div>
+      <ul class="checklist">
+        {included.map((item, i) => <li data-reveal style={`--i: ${Math.min(i, 5)}`}><Icon name="check" size={20} />{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section tone-cream" aria-labelledby="mnd-title">
+    <div class="container two-col">
+      <div class="stack" style="--stack: 1.25rem">
+        <p class="eyebrow" data-reveal>Månedlig ordning</p>
+        <h2 id="mnd-title" class="title-md" data-reveal style="--i: 1">Nytt innhold hver måned</h2>
+      </div>
+      <div class="prose" data-reveal style="--i: 2">
+        <p>Med en månedlig pakke kommer vi tilbake jevnlig og lager nye klipp og bilder. Da har dere alltid noe ferskt å legge ut, uten å måtte tenke på det.</p>
+        <p>Hver måned avtaler vi tema sammen: en ny meny, en kampanje, en ansatt dere vil vise frem eller noe som skjer i nabolaget. Vi filmer, redigerer og leverer – og dere bestemmer hva som publiseres.</p>
+        <p><strong>Ingen binding.</strong> Avtalen løper fra måned til måned, og dere kan stoppe når dere vil.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tone-white" aria-labelledby="mote-title">
+    <div class="container">
+      <SectionHead eyebrow="Første møte" title="Slik starter vi" id="mote-title" split lead={`Etter møtet filmer vi, og dere får de ferdige klippene ${site.deliveryTime}.`} />
+      <ol class="meeting">
+        {firstMeeting.map((m, i) => (
+          <li class="card meeting-step" data-reveal style={`--i: ${i}`}>
+            <span class="meeting-n">0{i + 1}</span>
+            <h3>{m.title}</h3>
+            <p class="muted">{m.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="delivery" data-reveal><Icon name="clock" size={20} /><span><strong>Leveringstid:</strong> {site.deliveryTime[0]?.toUpperCase()}{site.deliveryTime.slice(1)}. Vi sier alltid fra hvis noe tar lenger tid.</span></p>
+    </div>
+  </section>
+
+  <section class="section tone-cream" aria-labelledby="bransjer-title">
+    <div class="container">
+      <SectionHead eyebrow="Hvem passer det for?" title="Idéer per bransje" id="bransjer-title" split lead="Alle bedrifter har noe å vise frem. Her er noen idéer – vi finner flere sammen med dere." />
+      <ul class="industries">
+        {site.industries.map((ind, i) => (
+          <li class="card lift industry" data-reveal style={`--i: ${i % 4}`}>
+            <h3>{ind.name}</h3>
+            <p class="muted">{ind.ideas}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="pakker" class="section tone-mist" aria-labelledby="pakker-title">
+    <div class="container">
+      <SectionHead eyebrow="Pakker" title="Velg det som passer" id="pakker-title" split lead="Alle pakker er uten binding. Prisene er foreløpige og avtales med hver enkelt bedrift." />
+      <PackageCards />
+      <div class="table-wrap" data-reveal>
+        <table class="compare">
+          <caption class="sr-only">Sammenligning av pakkene</caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">Hva</span></th>
+              {site.packages.map((p) => <th scope="col">{p.name}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {site.comparison.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                {site.packages.map((p) => <td>{row.values[p.id]}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tone-white" aria-labelledby="vilkar-title">
+    <div class="container faq-grid">
+      <div class="stack" style="--stack: 1.25rem">
+        <p class="eyebrow" data-reveal>Rettigheter og endringer</p>
+        <h2 id="vilkar-title" class="title-md" data-reveal style="--i: 1">Det praktiske</h2>
+        <p class="draft-note" data-reveal style="--i: 2">{site.draftNotice}</p>
+        <p class="muted small" data-reveal style="--i: 3">Les også <a href="/vilkar/">vilkårene</a>.</p>
+      </div>
+      <Accordion items={site.termsFaq} />
+    </div>
+  </section>
+
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .split,
+  .two-col,
+  .faq-grid {
+    display: grid;
+    gap: clamp(36px, 6vw, 96px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1fr 1.1fr;
+    }
+    .split.reverse > :first-child {
+      order: 2;
+    }
+    .two-col,
+    .faq-grid {
+      grid-template-columns: 0.9fr 1.2fr;
+      align-items: start;
+    }
+  }
+  .checklist {
+    display: grid;
+    gap: 0.9rem;
+    padding: 0;
+    list-style: none;
+  }
+  .checklist li {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    font-weight: 540;
+  }
+  .checklist :global(svg) {
+    flex: none;
+    color: var(--teal-ink);
+    margin-top: 0.1em;
+  }
+  .meeting,
+  .industries {
+    display: grid;
+    gap: clamp(16px, 2vw, 24px);
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 640px) {
+    .meeting,
+    .industries {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .meeting,
+    .industries {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .meeting-step,
+  .industry {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: clamp(24px, 3vw, 32px);
+  }
+  .meeting-n {
+    font-family: var(--font-display);
+    font-weight: 750;
+    color: var(--coral-strong);
+  }
+  .meeting-step h3,
+  .industry h3 {
+    font-size: var(--text-lg);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+  .delivery {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin-top: clamp(28px, 4vw, 48px);
+    padding: 1.2rem 1.4rem;
+    border-radius: var(--radius);
+    background: var(--mist);
+    max-width: 720px;
+  }
+  .delivery :global(svg) {
+    flex: none;
+    color: var(--teal-ink);
+    margin-top: 0.15em;
+  }
+  .table-wrap {
+    margin-top: clamp(40px, 6vw, 72px);
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+  .compare {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .compare th,
+  .compare td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .compare thead th {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 750;
+  }
+  .compare tbody th {
+    font-weight: 620;
+    color: var(--ink-soft);
+  }
+  .compare tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  .draft-note {
+    display: inline-flex;
+    width: fit-content;
+    padding: 0.35em 0.85em;
+    border-radius: var(--radius-pill);
+    background: #fdf3dc;
+    color: #6b4a07;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+  .stack a {
+    color: var(--coral-strong);
+  }
+</style>

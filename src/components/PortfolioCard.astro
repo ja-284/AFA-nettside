@@ -1,0 +1,108 @@
+---
+import { getImage, Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { categoryShort } from '../lib/portfolio';
+import Icon from './ui/Icon.astro';
+
+interface Props {
+  item: CollectionEntry<'portfolio'>;
+  sizes?: string;
+}
+const { item, sizes = '(min-width: 900px) 320px, 70vw' } = Astro.props;
+const d = item.data;
+const full = await getImage({ src: d.image, width: Math.min(1600, d.image.width), format: 'webp' });
+const href = d.type === 'video' && d.video ? d.video : full.src;
+---
+<a
+  class="pf-card"
+  href={href}
+  data-lightbox
+  data-type={d.type}
+  data-src={href}
+  data-poster={full.src}
+  data-title={`${d.title} – ${d.business}`}
+  data-category={d.category}
+>
+  <Picture src={d.image} alt="" formats={['avif', 'webp']} widths={[360, 540, 720].filter((w) => w <= d.image.width)} sizes={sizes} loading="lazy" class="pf-img" />
+  <span class="pf-overlay">
+    <span class="chip pf-chip">{categoryShort(d.category)}</span>
+    {d.type === 'video' && <span class="pf-play" aria-hidden="true"><Icon name="play" size={22} /></span>}
+    <span class="pf-meta">
+      <span class="pf-title">{d.title}</span>
+      <span class="pf-business">{d.business}</span>
+    </span>
+  </span>
+  <span class="sr-only">{d.type === 'video' ? 'Spill av video' : 'Vis bilde'}</span>
+</a>
+
+<style>
+  .pf-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--navy);
+    color: var(--white);
+    text-decoration: none;
+    box-shadow: var(--shadow);
+    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+  }
+  .pf-card:hover,
+  .pf-card:focus-visible {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+  .pf-card :global(img),
+  .pf-card :global(picture) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out);
+  }
+  .pf-card:hover :global(img) {
+    transform: scale(1.05);
+  }
+  .pf-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    background: linear-gradient(180deg, rgb(11 37 48 / 0.3), transparent 30%, transparent 55%, rgb(11 37 48 / 0.85));
+  }
+  .pf-chip {
+    align-self: flex-start;
+    border-color: rgb(255 255 255 / 0.5);
+    background: rgb(11 37 48 / 0.35);
+    backdrop-filter: blur(6px);
+  }
+  .pf-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgb(247 244 239 / 0.92);
+    color: var(--navy);
+    translate: -50% -50%;
+  }
+  .pf-meta {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .pf-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .pf-business {
+    font-size: var(--text-sm);
+    opacity: 0.85;
+  }
+</style>

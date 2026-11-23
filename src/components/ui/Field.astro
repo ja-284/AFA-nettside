@@ -1,0 +1,53 @@
+---
+import type { Option } from '../../lib/forms';
+/** Tekstfelt, nedtrekksliste eller tekstområde med etikett, hjelpetekst og feilmelding knyttet til feltet. */
+interface Props {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'url' | 'textarea' | 'select' | 'password';
+  required?: boolean;
+  hint?: string;
+  autocomplete?: string;
+  options?: Option[];
+  placeholder?: string;
+  maxlength?: number;
+  minlength?: number;
+  rows?: number;
+  inputmode?: 'text' | 'email' | 'tel' | 'url' | 'numeric';
+  class?: string;
+  idPrefix?: string;
+  /** Skjul «(valgfritt)» for felt som bare kreves i noen tilfeller. */
+  conditional?: boolean;
+}
+const {
+  name, label, type = 'text', required = false, hint, autocomplete, options = [], placeholder,
+  maxlength, minlength, rows = 5, inputmode, class: cls, idPrefix = 'f', conditional = false,
+} = Astro.props;
+const id = `${idPrefix}-${name}`;
+const describedBy = [hint && `${id}-hint`, `${id}-error`].filter(Boolean).join(' ');
+const common = {
+  id,
+  name,
+  required,
+  'aria-describedby': describedBy,
+  autocomplete,
+  'data-field': name,
+};
+---
+<div class:list={['field', cls]} data-field-wrap={name}>
+  <label class="field-label" for={id}>
+    {label}{!required && !conditional && <span class="optional"> (valgfritt)</span>}
+  </label>
+  {hint && <p class="field-hint" id={`${id}-hint`}>{hint}</p>}
+  {type === 'textarea' ? (
+    <textarea class="textarea" rows={rows} maxlength={maxlength} minlength={minlength} placeholder={placeholder} {...common} />
+  ) : type === 'select' ? (
+    <select class="select" {...common}>
+      <option value="">Velg …</option>
+      {options.map((o) => <option value={o.value}>{o.label}</option>)}
+    </select>
+  ) : (
+    <input class="input" type={type} maxlength={maxlength} minlength={minlength} placeholder={placeholder} inputmode={inputmode} {...common} />
+  )}
+  <p class="field-error" id={`${id}-error`} aria-live="polite"></p>
+</div>

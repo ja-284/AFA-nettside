@@ -1,0 +1,172 @@
+---
+import { site } from '../../config/site';
+import { getPortfolio } from '../../lib/portfolio';
+import PortfolioCard from '../PortfolioCard.astro';
+import Button from '../ui/Button.astro';
+import SectionHead from '../ui/SectionHead.astro';
+
+const items = (await getPortfolio()).slice(0, 10);
+const empty = items.length === 0;
+// Tomme plasser vises bare til vi har egne klipp. De er tydelig merket som ledige.
+const slots = site.industries.slice(0, 5);
+---
+<section class="section tone-cream rail-section" aria-labelledby="eksempler-title" data-motion="rail">
+  <div class="container">
+    <SectionHead eyebrow="Eksempler" title={empty ? 'Plass til de første klippene' : 'Noe av det vi har laget'} id="eksempler-title" split lead={empty ? 'Vi har akkurat startet, og her kommer de første klippene våre. Vil din bedrift være blant de første?' : 'Korte klipp og bilder vi har laget for bedrifter i nabolaget.'}>
+      <a class="link-arrow" href="/eksempler/">Se alle eksempler</a>
+    </SectionHead>
+  </div>
+
+  <div class="rail-pin" data-rail-pin>
+    <div class="rail-viewport" data-rail-viewport tabindex="0" role="region" aria-label="Eksempler, bla sidelengs">
+      <ul class="rail-track" data-rail-track>
+        {empty ? (
+          <>
+            <li class="rail-item rail-intro">
+              <div class="rail-intro-card">
+                <p class="rail-intro-title">Våre første klipp legges ut her.</p>
+                <p class="muted">Vi viser bare arbeid som bedriftene har sagt ja til. Ingen oppdiktede eksempler.</p>
+              </div>
+            </li>
+            {slots.map((s, i) => (
+              <li class="rail-item">
+                <div class="rail-slot" style={`--i: ${i}`}>
+                  <span class="rail-slot-cat">{s.short}</span>
+                  <span class="rail-slot-ratio" aria-hidden="true">9:16</span>
+                  <span class="rail-slot-text">Ledig plass</span>
+                </div>
+              </li>
+            ))}
+          </>
+        ) : (
+          items.map((item) => <li class="rail-item"><PortfolioCard item={item} /></li>)
+        )}
+        <li class="rail-item rail-cta">
+          <div class="rail-cta-card tone-dark">
+            <p class="rail-cta-title">Bli en av de første</p>
+            <p>Første prøve er gratis. Tre klipp, ingen forpliktelser.</p>
+            <Button href="/bestill/?pakke=prove" variant="light">Bestill gratis prøve</Button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rail-section {
+    overflow: clip;
+  }
+  .rail-viewport {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: thin;
+    padding-bottom: 16px;
+    border-radius: 0;
+  }
+  .rail-viewport:focus-visible {
+    outline-offset: -3px;
+  }
+  .rail-track {
+    display: flex;
+    gap: clamp(14px, 2vw, 24px);
+    width: max-content;
+    margin: 0;
+    padding: 8px max(var(--gutter), calc((100vw - var(--container)) / 2)) 8px;
+    list-style: none;
+  }
+  .rail-item {
+    flex: none;
+    width: clamp(220px, 62vw, 320px);
+    scroll-snap-align: start;
+  }
+  .rail-intro {
+    width: clamp(260px, 72vw, 380px);
+  }
+  .rail-intro-card,
+  .rail-cta-card {
+    display: grid;
+    gap: 1rem;
+    align-content: end;
+    height: 100%;
+    min-height: 100%;
+    aspect-ratio: auto;
+    padding: clamp(22px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+  }
+  .rail-intro-card {
+    background: var(--mist);
+    align-content: center;
+  }
+  .rail-intro-title,
+  .rail-cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 1.2rem + 2vw, 2.8rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  .rail-slot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.5rem;
+    aspect-ratio: 9 / 16;
+    border: 1.5px dashed var(--line-strong);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(80% 60% at 50% 30%, rgb(255 255 255 / 0.9), transparent 70%),
+      repeating-linear-gradient(135deg, rgb(11 37 48 / 0.025) 0 12px, transparent 12px 24px);
+    color: var(--ink-soft);
+  }
+  .rail-slot-cat {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-slot-ratio {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 0.75rem;
+    font-weight: 650;
+  }
+  .rail-slot-text {
+    font-size: var(--text-sm);
+  }
+  .rail-cta {
+    width: clamp(260px, 72vw, 360px);
+  }
+  .rail-cta-card {
+    align-content: end;
+    color: var(--cream);
+    background:
+      radial-gradient(90% 60% at 80% 10%, rgb(217 72 43 / 0.5), transparent 65%),
+      radial-gradient(80% 60% at 0% 100%, rgb(27 138 156 / 0.55), transparent 65%),
+      var(--navy);
+  }
+  .rail-cta-card p:not(.rail-cta-title) {
+    color: var(--on-dark-soft);
+  }
+  .rail-cta-card :global(.btn) {
+    justify-self: start;
+  }
+  /* Festet, horisontal versjon (motion.ts) */
+  :global(.rail-section.is-pinned) .rail-viewport {
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+  :global(.rail-section.is-pinned) .rail-pin {
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+  }
+</style>

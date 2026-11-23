@@ -1,0 +1,90 @@
+---
+import Breadcrumbs, { type Crumb } from './ui/Breadcrumbs.astro';
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  crumbs: Crumb[];
+  tone?: 'cream' | 'mist';
+  narrow?: boolean;
+}
+const { eyebrow, title, lead, crumbs, tone = 'cream', narrow = false } = Astro.props;
+const words = title.split(' ');
+---
+<section class:list={['page-hero', `tone-${tone}`]} aria-labelledby="page-title">
+  <div class="blobs" aria-hidden="true">
+    <span class="blob" style="--c: rgb(27 138 156 / 0.38); --size: 48vmax; top: -40%; right: -12%; --t: 28s"></span>
+    <span class="blob" style="--c: rgb(233 169 43 / 0.32); --size: 36vmax; bottom: -40%; left: -10%; --t: 24s; --dx: 8%"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class:list={['container', 'page-hero-inner']}>
+    <Breadcrumbs items={crumbs} />
+    <p class="eyebrow ph-eyebrow">{eyebrow}</p>
+    <h1 id="page-title" class="title page-title" aria-label={title}>
+      <span aria-hidden="true">{words.map((w, i) => <>{i > 0 && ' '}<span class="w"><span class="wi" style={`--n: ${i}`}>{w}</span></span></>)}</span>
+    </h1>
+    {lead && <p class:list={['lead', 'page-lead', narrow && 'narrow']}>{lead}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(var(--header-h) + clamp(32px, 6vw, 80px));
+    padding-bottom: clamp(56px, 8vw, 112px);
+  }
+  .page-hero-inner {
+    position: relative;
+    display: grid;
+    gap: clamp(16px, 2.4vw, 28px);
+    justify-items: start;
+  }
+  .page-title {
+    font-size: clamp(2.9rem, 0.8rem + 8.6vw, 9rem);
+    max-width: 16ch;
+  }
+  .w {
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.1em 0.04em 0.02em;
+    margin: -0.1em -0.04em -0.02em;
+    vertical-align: top;
+  }
+  .wi {
+    display: inline-block;
+    animation: word-in 850ms var(--ease-out) both;
+    animation-delay: calc(80ms + var(--n) * 70ms);
+  }
+  .ph-eyebrow,
+  .page-lead {
+    animation: fade-up 800ms var(--ease-out) 300ms both;
+  }
+  .page-lead {
+    max-width: 52ch;
+  }
+  @keyframes word-in {
+    from {
+      transform: translate3d(0, 105%, 0) rotate(3deg);
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wi,
+    .ph-eyebrow,
+    .page-lead {
+      animation: fade 400ms ease both;
+    }
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+</style>

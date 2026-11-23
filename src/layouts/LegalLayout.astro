@@ -1,0 +1,73 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+interface Props {
+  title: string;
+  eyebrow: string;
+  description: string;
+  path: string;
+  og: string;
+  updated: string;
+  draft?: string;
+}
+const { title, eyebrow, description, path, og, updated, draft } = Astro.props;
+const crumbs = [
+  { name: 'Hjem', href: '/' },
+  { name: title, href: path },
+];
+---
+<BaseLayout title={title} description={description} og={og} crumbs={crumbs}>
+  <PageHero eyebrow={eyebrow} title={title} crumbs={crumbs} />
+  <section class="section tone-cream" style="padding-top: 0">
+    <div class="container-narrow">
+      <p class="legal-meta">
+        Sist oppdatert {updated}
+        {draft && <span class="draft">{draft}</span>}
+      </p>
+      <article class="prose legal">
+        <slot />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+  }
+  .draft {
+    padding: 0.35em 0.85em;
+    border-radius: var(--radius-pill);
+    background: #fdf3dc;
+    color: #6b4a07;
+    font-weight: 600;
+  }
+  .legal :global(h2) {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+  .legal :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+  .legal :global(th),
+  .legal :global(td) {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .legal :global(.table-wrap) {
+    overflow-x: auto;
+  }
+</style>

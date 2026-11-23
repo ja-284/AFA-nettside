@@ -1,0 +1,10 @@
+---
+interface Props {
+  tag?: 'div' | 'article' | 'li';
+  lift?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const { tag: Tag = 'div', lift = true, class: cls, ...rest } = Astro.props;
+---
+<Tag class:list={['card', lift && 'lift', cls]} {...rest}><slot /></Tag>

@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+/** Pilleformet knapp eller lenke. `magnetic` gir en myk «magnet»-effekt med mus. */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'ghost' | 'light';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: 'arrow' | 'play' | 'send' | 'mail' | 'phone' | 'arrow-up' | 'arrow-left' | 'chat' | 'none';
+  magnetic?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'primary', size = 'md', icon = 'arrow', magnetic = false, type = 'button', class: cls, ...rest } = Astro.props;
+const classes = ['btn', variant !== 'primary' && `btn-${variant}`, size !== 'md' && `btn-${size}`, cls];
+const Tag = href ? 'a' : 'button';
+---
+<Tag
+  href={href}
+  type={href ? undefined : type}
+  class:list={classes}
+  data-magnetic={magnetic ? '' : undefined}
+  {...rest}
+>
+  <span class="btn-label"><slot /></span>
+  {icon !== 'none' && <span class="btn-icon"><Icon name={icon} size={18} /></span>}
+</Tag>

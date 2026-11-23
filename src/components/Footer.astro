@@ -1,0 +1,162 @@
+---
+import { site } from '../config/site';
+import { nav } from '../config/nav';
+import Icon from './ui/Icon.astro';
+import Logo from './ui/Logo.astro';
+
+const socials = (
+  [
+    ['instagram', 'Instagram', site.social.instagram],
+    ['tiktok', 'TikTok', site.social.tiktok],
+    ['facebook', 'Facebook', site.social.facebook],
+  ] as const
+).filter(([, , url]) => url);
+const year = new Date().getFullYear();
+---
+<footer class="site-footer tone-dark">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <a class="footer-brand" href="/" aria-label={`${site.name} – til forsiden`}><Logo size={44} light /></a>
+      <p>Korte, ferdig redigerte videoer og bilder for lokale bedrifter på {site.areas.core.join(', ').replace(/, ([^,]*)$/, ' og $1')}. Laget av elever, med mobil og mye engasjement.</p>
+    </div>
+    <nav aria-label="Bunnmeny" class="footer-col">
+      <h2 class="footer-h">Sider</h2>
+      <ul>
+        <li><a href="/">Hjem</a></li>
+        {nav.map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+        <li><a href="/bestill/">Bestill</a></li>
+      </ul>
+    </nav>
+    <div class="footer-col">
+      <h2 class="footer-h">Kontakt</h2>
+      <ul>
+        <li><a href={`mailto:${site.contact.email}`}><Icon name="mail" size={18} />{site.contact.email}</a></li>
+        {site.contact.phone && <li><a href={`tel:${site.contact.phone.replace(/\s/g, '')}`}><Icon name="phone" size={18} />{site.contact.phone}</a></li>}
+        <li><span><Icon name="pin" size={18} />{site.areas.core.join(' · ')}</span></li>
+        {site.orgNumber && <li><span>Org.nr. {site.orgNumber}</span></li>}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2 class="footer-h">Følg oss</h2>
+      {socials.length ? (
+        <ul class="socials">
+          {socials.map(([icon, label, url]) => (
+            <li><a href={url} rel="me noopener" target="_blank"><Icon name={icon} size={20} />{label}<span class="sr-only"> (åpnes i ny fane)</span></a></li>
+          ))}
+        </ul>
+      ) : (
+        <p class="muted small">Kontoene våre på sosiale medier kommer snart.</p>
+      )}
+    </div>
+  </div>
+  <div class="container footer-word" aria-hidden="true">AFA VIDEOS</div>
+  <div class="container footer-bottom">
+    <p>© {year} {site.name}</p>
+    <ul>
+      <li><a href="/personvern/">Personvern</a></li>
+      <li><a href="/vilkar/">Vilkår</a></li>
+    </ul>
+    <p class="made">Laget av elever på Fornebu</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    overflow: hidden;
+    padding-top: clamp(72px, 10vw, 128px);
+  }
+  .footer-grid {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 760px) {
+    .footer-grid {
+      grid-template-columns: 1.5fr 1fr 1fr;
+    }
+    .footer-about {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 1080px) {
+    .footer-grid {
+      grid-template-columns: 1.6fr 1fr 1.2fr 1fr;
+    }
+    .footer-about {
+      grid-column: auto;
+    }
+  }
+  .footer-about {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    max-width: 40ch;
+    color: var(--on-dark-soft);
+  }
+  .footer-brand {
+    width: fit-content;
+    border-radius: 14px;
+  }
+  .footer-h {
+    margin-bottom: 1rem;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--on-dark-soft);
+  }
+  .footer-col ul {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0;
+    list-style: none;
+  }
+  .footer-col a,
+  .footer-col span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 32px;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .footer-col a:hover {
+    color: var(--coral-on-dark);
+  }
+  .footer-word {
+    position: relative;
+    margin-top: clamp(56px, 8vw, 110px);
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 15.5vw, 16rem);
+    font-weight: 800;
+    line-height: 0.8;
+    letter-spacing: -0.055em;
+    white-space: nowrap;
+    color: rgb(247 244 239 / 0.07);
+    user-select: none;
+  }
+  .footer-bottom {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    justify-content: space-between;
+    padding-block: 1.75rem 2.25rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--text-sm);
+    color: var(--on-dark-soft);
+  }
+  .footer-bottom ul {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .footer-bottom a:hover {
+    color: var(--cream);
+  }
+</style>

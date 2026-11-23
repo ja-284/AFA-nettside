@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { faqLd } from '../lib/seo';
+import Hero from '../components/home/Hero.astro';
+import Statement from '../components/home/Statement.astro';
+import WhatWeDo from '../components/home/WhatWeDo.astro';
+import Marquee from '../components/ui/Marquee.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
+import WhyUs from '../components/home/WhyUs.astro';
+import PortfolioRail from '../components/home/PortfolioRail.astro';
+import Packages from '../components/home/Packages.astro';
+import AboutTeaser from '../components/home/AboutTeaser.astro';
+import Reviews from '../components/home/Reviews.astro';
+import Faq from '../components/home/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+
+const marqueeItems = ['Kafeer', 'Restauranter', 'Frisører', 'Skjønnhet', 'Trening', 'Butikker', 'Kontorer', 'Klubber', 'Foreninger', 'Arrangementer'];
+---
+<BaseLayout
+  title={`${site.name} – reels og bilder for lokale bedrifter på Fornebu`}
+  fullTitle
+  page="home"
+  progress
+  jsonLd={[faqLd(site.faq)]}
+>
+  <Hero />
+  <Statement />
+  <WhatWeDo />
+  <Marquee items={marqueeItems} label="Bransjer vi hjelper" />
+  <HowItWorks />
+  <WhyUs />
+  <PortfolioRail />
+  <Packages />
+  <AboutTeaser />
+  <Reviews />
+  <Faq />
+  <FinalCta />
+</BaseLayout>

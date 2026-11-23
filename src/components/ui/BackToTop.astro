@@ -1,0 +1,42 @@
+<a href="#top" class="to-top" data-to-top aria-label="Til toppen av siden">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+</a>
+
+<style>
+  .to-top {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 90;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--cream);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+    pointer-events: none;
+    transition:
+      opacity var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-spring),
+      background-color var(--dur-fast);
+  }
+  .to-top.is-visible,
+  .to-top:focus-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .to-top:hover {
+    background: var(--coral-strong);
+  }
+  .to-top:focus-visible {
+    outline-color: var(--sun);
+  }
+  :global(html:not(.js)) .to-top {
+    display: none;
+  }
+</style>

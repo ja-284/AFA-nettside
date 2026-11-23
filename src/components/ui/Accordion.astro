@@ -1,0 +1,20 @@
+---
+import type { FaqItem } from '../../config/site';
+/** Spørsmål og svar med native <details> – fungerer uten JavaScript. */
+interface Props {
+  items: FaqItem[];
+  name?: string;
+}
+const { items, name } = Astro.props;
+---
+<div class="accordion">
+  {items.map((item, i) => (
+    <details name={name} data-reveal style={`--i: ${Math.min(i, 4)}`}>
+      <summary>
+        <span>{item.q}</span>
+        <span class="plus" aria-hidden="true" />
+      </summary>
+      <div class="answer"><p>{item.a}</p></div>
+    </details>
+  ))}
+</div>

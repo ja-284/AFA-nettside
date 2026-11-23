@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { site } from '../../config/site';
+
+const steps = [
+  { title: 'Vi leser bestillingen', text: 'Hele gruppen får beskjed, og vi ser på hva dere ønsker.' },
+  { title: 'Vi tar kontakt', text: `${site.contact.responseTime} Vi bruker kontaktmåten du valgte.` },
+  { title: 'Vi avtaler filming', text: 'Sammen finner vi en dag som passer, og vi lager en enkel plan.' },
+  { title: 'Dere får klippene', text: `Ferdige klipp og bilder kommer ${site.deliveryTime}.` },
+];
+---
+<BaseLayout title="Takk for bestillingen" noindex og="bestill">
+  <section class="section tone-cream thanks">
+    <div class="blobs" aria-hidden="true">
+      <span class="blob" style="--c: rgb(127 200 169 / 0.55); --size: 50vmax; top: -30%; right: -10%"></span>
+      <span class="blob" style="--c: rgb(233 169 43 / 0.35); --size: 40vmax; bottom: -30%; left: -10%"></span>
+    </div>
+    <div class="container-narrow thanks-inner">
+      <span class="check-badge" aria-hidden="true"><Icon name="check" size={34} /></span>
+      <p class="eyebrow">Bestillingen er sendt</p>
+      <h1 class="title">Takk! Vi gleder oss.</h1>
+      <p class="lead">Vi har fått bestillingen din<span data-ref-wrap hidden> med referanse <strong data-ref></strong></span>. Her er det som skjer nå:</p>
+      <ol class="next">
+        {steps.map((s, i) => (
+          <li class="card" data-reveal style={`--i: ${i}`}>
+            <span class="n">0{i + 1}</span>
+            <div><h2>{s.title}</h2><p class="muted">{s.text}</p></div>
+          </li>
+        ))}
+      </ol>
+      <p class="muted">Har du ikke hørt fra oss innen et par dager? Skriv til <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
+      <div class="btn-row">
+        <Button href="/" variant="ghost" icon="arrow-left">Til forsiden</Button>
+        <Button href="/eksempler/" icon="arrow">Se hvordan et reel er bygget opp</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const ref = new URLSearchParams(location.search).get('ref');
+  if (ref && /^AFA-[A-Z0-9]{6}$/.test(ref)) {
+    const el = document.querySelector('[data-ref]');
+    const wrap = document.querySelector<HTMLElement>('[data-ref-wrap]');
+    if (el && wrap) {
+      el.textContent = ref;
+      wrap.hidden = false;
+    }
+  }
+</script>
+
+<style>
+  .thanks {
+    overflow: hidden;
+    padding-top: calc(var(--header-h) + clamp(40px, 8vw, 96px));
+  }
+  .thanks-inner {
+    position: relative;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+  .check-badge {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--mint);
+    animation: pop 700ms var(--ease-spring) both;
+  }
+  @keyframes pop {
+    from {
+      transform: scale(0.4);
+      opacity: 0;
+    }
+  }
+  .next {
+    display: grid;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+  }
+  .next li {
+    display: flex;
+    gap: 1.1rem;
+    padding: 1.25rem 1.4rem;
+  }
+  .next h2 {
+    font-size: var(--text-lg);
+    font-weight: 750;
+  }
+  .n {
+    font-family: var(--font-display);
+    font-weight: 750;
+    color: var(--coral-strong);
+  }
+  .thanks a:not(.btn) {
+    color: var(--coral-strong);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .check-badge {
+      animation: none;
+    }
+  }
+</style>

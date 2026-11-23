@@ -1,0 +1,25 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  id: string;
+  lead?: string;
+  split?: boolean;
+  size?: 'xl' | 'md';
+  level?: 'h1' | 'h2';
+}
+const { eyebrow, title, id, lead, split = false, size = 'xl', level = 'h2' } = Astro.props;
+const H = level;
+---
+<header class:list={['section-head', split && 'split']}>
+  <div class="stack" style="--stack: 1.1rem">
+    {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
+    <H id={id} class={size === 'xl' ? 'title' : 'title-md'} data-reveal style="--i: 1">{title}</H>
+  </div>
+  {(lead || Astro.slots.has('default')) && (
+    <div class="stack" data-reveal style="--i: 2">
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
+    </div>
+  )}
+</header>

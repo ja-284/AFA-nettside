@@ -1,0 +1,82 @@
+/* ─── Designtokens for AFA Videos ─────────────────────────────────────────── */
+:root {
+  /* Merkefarger */
+  --navy: #0b2530;
+  --petrol: #14485a;
+  --teal: #1b8a9c;
+  --teal-ink: #13707f; /* teal som tekst på lys bakgrunn (AA) */
+  --coral: #d9482b; /* dekor og store flater */
+  --coral-strong: #c43d21; /* knapper og tekst (AA mot hvit og off-white) */
+  --coral-deep: #a9331b;
+  --coral-on-dark: #f28a6f;
+  --sun: #e9a92b;
+  --mint: #7fc8a9;
+
+  /* Nøytrale */
+  --cream: #f7f4ef;
+  --cream-2: #efe9e0;
+  --mist: #eef4f6;
+  --mist-2: #e1ecef;
+  --white: #ffffff;
+
+  /* Semantiske */
+  --bg: var(--cream);
+  --surface: var(--white);
+  --ink: var(--navy);
+  --ink-soft: #3e5761;
+  --line: rgb(11 37 48 / 0.12);
+  --line-strong: rgb(11 37 48 / 0.28);
+  --on-dark: var(--cream);
+  --on-dark-soft: #b9cdd3;
+  --focus: var(--teal);
+  --danger: #b3261e;
+
+  /* Typografi */
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem); /* 17–19 px */
+  --text-lg: clamp(1.1875rem, 1.05rem + 0.6vw, 1.5rem);
+  --text-xl: clamp(1.4rem, 1.15rem + 1.1vw, 2.1rem);
+  --text-2xl: clamp(1.9rem, 1.3rem + 2.6vw, 3.6rem);
+  --text-title: clamp(2.6rem, 1.2rem + 6.4vw, 7rem); /* seksjonsoverskrifter */
+  --text-display: clamp(2.55rem, 0.6rem + 10.6vw, 11.5rem); /* hero */
+
+  /* Former */
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius: 22px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgb(11 37 48 / 0.05), 0 2px 8px -2px rgb(11 37 48 / 0.08);
+  --shadow: 0 1px 2px rgb(11 37 48 / 0.04), 0 14px 34px -14px rgb(11 37 48 / 0.22);
+  --shadow-lg: 0 2px 4px rgb(11 37 48 / 0.04), 0 30px 60px -24px rgb(11 37 48 / 0.32);
+
+  /* Bevegelse */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 220ms;
+  --dur: 450ms;
+  --dur-slow: 850ms;
+
+  /* Layout */
+  --container: 1280px;
+  --container-narrow: 880px;
+  --gutter: clamp(16px, 4.5vw, 48px);
+  --section-y: clamp(88px, 12vw, 176px);
+  --header-h: 72px;
+
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur: 200ms;
+    --dur-slow: 300ms;
+  }
+}

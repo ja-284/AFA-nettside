@@ -1,0 +1,337 @@
+---
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource-variable/bricolage-grotesque/wght.css';
+import '../../styles/tokens.css';
+import '../../styles/base.css';
+import '../../styles/components.css';
+import Logo from '../../components/ui/Logo.astro';
+import { site } from '../../config/site';
+import { orderStatuses, reviewStatuses, contactStatuses } from '../../lib/forms';
+---
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Admin – {site.name}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="admin" data-admin>
+    <header class="a-header">
+      <div class="a-wrap a-header-inner">
+        <a href="/" class="a-brand"><Logo size={32} light /><span>{site.name} <small>Admin</small></span></a>
+        <div class="a-user" data-user hidden>
+          <span data-user-label></span>
+          <button type="button" class="btn btn-ghost btn-sm" data-logout>Logg ut</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="a-wrap a-main" id="innhold">
+      <noscript><p class="form-alert">Admin krever JavaScript.</p></noscript>
+      <p class="a-loading" data-loading>Laster …</p>
+
+      <section class="card a-login" data-login hidden aria-labelledby="login-title">
+        <h1 id="login-title" class="title-md">Logg inn</h1>
+        <p class="muted">Bare for gruppen. Bruk passordet dere har avtalt, eller logg inn via Cloudflare Access.</p>
+        <form class="form-grid" data-login-form>
+          <div class="form-alert" role="alert" data-login-alert></div>
+          <div class="field">
+            <label class="field-label" for="pw">Passord</label>
+            <input class="input" id="pw" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="btn" type="submit"><span class="btn-label">Logg inn</span></button>
+        </form>
+      </section>
+
+      <div data-app hidden>
+        <ul class="a-warnings" data-warnings></ul>
+
+        <div class="a-tabs" role="tablist" aria-label="Velg liste">
+          <button role="tab" id="tab-orders" aria-controls="panel-orders" aria-selected="true" data-tab="orders">Bestillinger <span class="a-count" data-count="orders"></span></button>
+          <button role="tab" id="tab-reviews" aria-controls="panel-reviews" aria-selected="false" tabindex="-1" data-tab="reviews">Vurderinger <span class="a-count" data-count="reviews"></span></button>
+          <button role="tab" id="tab-contacts" aria-controls="panel-contacts" aria-selected="false" tabindex="-1" data-tab="contacts">Henvendelser <span class="a-count" data-count="contacts"></span></button>
+        </div>
+
+        {[
+          { id: 'orders', label: 'Bestillinger', statuses: orderStatuses },
+          { id: 'reviews', label: 'Vurderinger', statuses: reviewStatuses },
+          { id: 'contacts', label: 'Henvendelser', statuses: contactStatuses },
+        ].map((p, i) => (
+          <section role="tabpanel" id={`panel-${p.id}`} aria-labelledby={`tab-${p.id}`} data-panel={p.id} hidden={i !== 0} class="a-panel">
+            <div class="a-toolbar">
+              <label class="a-filter">
+                <span class="sr-only">Filtrer {p.label.toLowerCase()} på status</span>
+                <select class="select" data-filter-status>
+                  <option value="">Alle statuser</option>
+                  {p.statuses.map((s) => <option value={s.value}>{s.label}</option>)}
+                </select>
+              </label>
+              <label class="a-search">
+                <span class="sr-only">Søk i {p.label.toLowerCase()}</span>
+                <input class="input" type="search" placeholder="Søk …" data-search />
+              </label>
+              <button type="button" class="btn btn-ghost btn-sm" data-refresh>Oppdater</button>
+              <a class="btn btn-ghost btn-sm" href={`/api/admin/export?type=${p.id}`} download>Eksporter CSV</a>
+            </div>
+            <p class="muted small" data-empty hidden>Ingenting her ennå.</p>
+            <div class="a-list" data-list></div>
+          </section>
+        ))}
+
+        <section class="a-maintenance">
+          <h2 class="a-h2">Personvern</h2>
+          <p class="muted small">Bestillinger og henvendelser uten aktivitet på {site.retentionMonths} måneder, og vurderinger som aldri ble publisert, skal slettes. Eksporter først hvis dere trenger en kopi.</p>
+          <button type="button" class="btn btn-ghost btn-sm" data-cleanup>Slett gamle data</button>
+          <p class="small" role="status" data-cleanup-status></p>
+        </section>
+      </div>
+    </main>
+    <p class="sr-only" role="status" aria-live="polite" data-live></p>
+
+    <script>
+      import '../../scripts/admin';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  body.admin {
+    background: var(--mist);
+    font-size: 16px;
+  }
+  .a-wrap {
+    width: min(100% - 32px, 1280px);
+    margin-inline: auto;
+  }
+  .a-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--navy);
+    color: var(--cream);
+  }
+  .a-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 64px;
+  }
+  .a-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 750;
+    text-decoration: none;
+  }
+  .a-brand small {
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--on-dark-soft);
+  }
+  .a-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--text-sm);
+  }
+  .a-user .btn {
+    --btn-fg: var(--cream);
+    --btn-border: rgb(247 244 239 / 0.35);
+  }
+  .a-main {
+    padding-block: 2rem 4rem;
+  }
+  .a-login {
+    display: grid;
+    gap: 1rem;
+    max-width: 440px;
+    margin: 6vh auto;
+    padding: 2rem;
+  }
+  .a-warnings {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    list-style: none;
+  }
+  .a-warnings li {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: #fdf3dc;
+    color: #6b4a07;
+    font-size: var(--text-sm);
+    font-weight: 560;
+  }
+  .a-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .a-tabs [role='tab'] {
+    min-height: 44px;
+    padding: 0 1.1rem;
+    border: 1.5px solid var(--line-strong);
+    border-radius: var(--radius-pill);
+    background: var(--white);
+    font-weight: 620;
+  }
+  .a-tabs [aria-selected='true'] {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--cream);
+  }
+  .a-count:not(:empty) {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.6em;
+    height: 1.6em;
+    margin-left: 0.3em;
+    padding: 0 0.4em;
+    border-radius: 99px;
+    background: var(--coral-strong);
+    color: var(--white);
+    font-size: 0.75rem;
+  }
+  .a-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .a-toolbar .select,
+  .a-toolbar .input {
+    min-height: 44px;
+    padding-block: 0.5rem;
+    font-size: 0.9375rem;
+  }
+  .a-search {
+    flex: 1 1 200px;
+  }
+  .a-filter {
+    flex: 0 1 200px;
+  }
+  .a-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .a-item {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+  .a-item.is-new {
+    box-shadow: inset 4px 0 0 var(--coral), var(--shadow-sm);
+  }
+  .a-row {
+    display: grid;
+    gap: 0.5rem 1.25rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .a-row {
+      grid-template-columns: 130px minmax(0, 1.4fr) minmax(0, 1fr) 170px;
+    }
+  }
+  .a-date {
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  .a-title {
+    font-weight: 700;
+  }
+  .a-sub {
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    overflow-wrap: anywhere;
+  }
+  .a-item details summary {
+    cursor: pointer;
+    font-weight: 620;
+    font-size: var(--text-sm);
+    color: var(--teal-ink);
+  }
+  .a-details {
+    display: grid;
+    gap: 0.25rem 1rem;
+    margin: 0.75rem 0;
+    font-size: var(--text-sm);
+  }
+  @media (min-width: 700px) {
+    .a-details {
+      grid-template-columns: 180px 1fr;
+    }
+  }
+  .a-details dt {
+    color: var(--ink-soft);
+  }
+  .a-details dd {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .a-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .a-note {
+    min-height: 80px;
+    font-size: 0.9375rem;
+  }
+  .a-status {
+    min-height: 40px;
+    padding-block: 0.4rem;
+    font-size: 0.9375rem;
+  }
+  .a-pill {
+    display: inline-block;
+    padding: 0.2em 0.7em;
+    border-radius: 99px;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    background: var(--mist-2);
+  }
+  .a-pill[data-s='godkjent'] {
+    background: #e3f3ec;
+    color: #0e4a37;
+  }
+  .a-pill[data-s='venter'] {
+    background: #fdf3dc;
+    color: #6b4a07;
+  }
+  .a-danger {
+    --btn-fg: var(--danger);
+    --btn-border: rgb(179 38 30 / 0.4);
+  }
+  .a-danger:hover {
+    --btn-bg: var(--danger);
+    --btn-border: var(--danger);
+    --btn-fg: var(--white);
+  }
+  .a-maintenance {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .a-h2 {
+    font-size: var(--text-lg);
+  }
+  .a-text {
+    white-space: pre-wrap;
+  }
+</style>

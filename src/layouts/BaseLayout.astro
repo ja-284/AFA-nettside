@@ -1,0 +1,96 @@
+---
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource-variable/bricolage-grotesque/wght.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import displayFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
+import bodyFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import { site } from '../config/site';
+import { abs, breadcrumbLd, businessLd, ldJson } from '../lib/seo';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BackToTop from '../components/ui/BackToTop.astro';
+import ScrollProgress from '../components/ui/ScrollProgress.astro';
+import type { Crumb } from '../components/ui/Breadcrumbs.astro';
+
+interface Props {
+  /** Sidetittel uten firmanavn. Forsiden bruker `fullTitle`. */
+  title: string;
+  fullTitle?: boolean;
+  description?: string;
+  /** Navn på delingsbildet i /og/ (uten .png). */
+  og?: string;
+  noindex?: boolean;
+  crumbs?: Crumb[];
+  jsonLd?: object[];
+  page?: string;
+  progress?: boolean;
+}
+
+const { title, fullTitle = false, description = site.description, og = 'hjem', noindex = false, crumbs, jsonLd = [], page, progress = false } = Astro.props;
+const pageTitle = fullTitle ? title : `${title} – ${site.name}`;
+const canonical = abs(Astro.url.pathname);
+const ogImage = abs(`/og/${og}.png`);
+const ld = [businessLd(), ...(crumbs ? [breadcrumbLd(crumbs)] : []), ...jsonLd];
+const analytics = site.analytics.enabled && site.analytics.token;
+---
+<!doctype html>
+<html lang={site.lang} id="top">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={canonical} />}
+    <meta name="theme-color" content="#F7F4EF" />
+    <meta name="color-scheme" content="light" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}: ${site.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+
+    <script is:inline>document.documentElement.classList.add('js');window.__revealFallback=setTimeout(function(){document.documentElement.classList.add('reveal-fallback')},3000);</script>
+
+    {ld.map((data) => <script type="application/ld+json" set:html={ldJson(data)} />)}
+    <slot name="head" />
+    {analytics && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: site.analytics.token })} />}
+  </head>
+  <body data-page={page}>
+    <a class="skip-link" href="#innhold">Hopp til innhold</a>
+    {progress && <ScrollProgress />}
+    <Header />
+    <main id="innhold" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <BackToTop />
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+</style>

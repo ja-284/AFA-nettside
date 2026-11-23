@@ -1,0 +1,7 @@
+# Kopier til .dev.vars for lokal utvikling (filen sjekkes ikke inn i git).
+# Turnstile-testnøkkel som alltid godkjenner. Se https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+ADMIN_PASSWORD=lokalt-testpassord
+# Valgfritt: e-postvarsling via Resend
+# RESEND_API_KEY=re_xxx
+# NOTIFY_EMAIL=gruppa@example.com

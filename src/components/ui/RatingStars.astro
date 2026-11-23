@@ -1,0 +1,15 @@
+---
+/** Visning av stjerner (1–5). Samme markup som serveren lager i functions/_lib/reviews.ts. */
+interface Props {
+  rating: number;
+  size?: number;
+}
+const { rating, size = 20 } = Astro.props;
+---
+<span class="stars" role="img" aria-label={`${rating} av 5 stjerner`}>
+  {Array.from({ length: 5 }, (_, i) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" class={i < rating ? 'on' : 'off'}>
+      <path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" />
+    </svg>
+  ))}
+</span>

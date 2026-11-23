@@ -1,0 +1,192 @@
+---
+/**
+ * «Slik ser et reel ut» – et tydelig merket eksempelformat (ikke kundearbeid).
+ * Viser oppbygningen av et typisk reel på 20 sekunder med en animert tidslinje.
+ */
+import PhoneFrame from './ui/PhoneFrame.astro';
+const beats = [
+  { t: '0–3 s', name: 'Kroken', text: 'Noe som fanger blikket med en gang: en bevegelse, en lyd eller et spørsmål.' },
+  { t: '3–15 s', name: 'Innholdet', text: 'Det dere vil vise: produktet, folkene eller stemningen. Korte klipp i takt med lyden.' },
+  { t: '15–20 s', name: 'Avslutningen', text: 'Hvor, når og hvorfor. En enkel oppfordring: «Kom innom!»' },
+];
+---
+<div class="demo">
+  <div class="demo-phone">
+    <PhoneFrame label="Eksempelformat: et stående reel på 20 sekunder">
+      <div class="demo-screen" aria-hidden="true">
+        <span class="demo-tag">Eksempelformat</span>
+        <div class="demo-scene s1"><span>Kroken</span></div>
+        <div class="demo-scene s2"><span>Innholdet</span></div>
+        <div class="demo-scene s3"><span>Avslutningen</span></div>
+        <div class="demo-bar"><i></i></div>
+        <span class="demo-format">9:16 · 20 sek</span>
+      </div>
+    </PhoneFrame>
+  </div>
+  <ol class="demo-beats">
+    {beats.map((b, i) => (
+      <li data-reveal style={`--i: ${i}`}>
+        <span class="beat-t">{b.t}</span>
+        <h3>{b.name}</h3>
+        <p class="muted">{b.text}</p>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .demo {
+    display: grid;
+    gap: clamp(36px, 6vw, 80px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .demo {
+      grid-template-columns: auto 1fr;
+    }
+  }
+  .demo-phone {
+    justify-self: center;
+  }
+  .demo-phone :global(.phone) {
+    --w: clamp(220px, 24vw, 300px);
+  }
+  .demo-screen {
+    position: absolute;
+    inset: 0;
+    color: var(--white);
+    font-family: var(--font-display);
+  }
+  .demo-tag {
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    z-index: 3;
+    translate: -50% 0;
+    padding: 0.35em 0.9em;
+    border-radius: 99px;
+    background: var(--sun);
+    color: var(--navy);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .demo-scene {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    opacity: 0;
+    animation: scene 12s infinite;
+  }
+  .s1 {
+    background: linear-gradient(160deg, var(--coral), #f0a07e);
+  }
+  .s2 {
+    background: linear-gradient(160deg, var(--teal), var(--petrol));
+    animation-delay: 1.8s;
+  }
+  .s3 {
+    background: linear-gradient(160deg, var(--sun), #f2c86f);
+    color: var(--navy);
+    animation-delay: 9s;
+  }
+  .s1 {
+    animation-name: scene1;
+  }
+  .s2 {
+    animation-name: scene2;
+    animation-delay: 0s;
+  }
+  .s3 {
+    animation-name: scene3;
+    animation-delay: 0s;
+  }
+  @keyframes scene1 {
+    0%, 14% { opacity: 1; }
+    16%, 100% { opacity: 0; }
+  }
+  @keyframes scene2 {
+    0%, 14% { opacity: 0; }
+    16%, 74% { opacity: 1; }
+    76%, 100% { opacity: 0; }
+  }
+  @keyframes scene3 {
+    0%, 74% { opacity: 0; }
+    76%, 100% { opacity: 1; }
+  }
+  .demo-bar {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 11%;
+    z-index: 3;
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 0.35);
+    overflow: hidden;
+  }
+  .demo-bar i {
+    display: block;
+    height: 100%;
+    background: var(--white);
+    transform-origin: 0 50%;
+    animation: bar 12s linear infinite;
+  }
+  @keyframes bar {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  .demo-format {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    z-index: 3;
+    translate: -50% 0;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 650;
+    opacity: 0.9;
+  }
+  .demo-beats {
+    display: grid;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .demo-beats li {
+    display: grid;
+    gap: 0.4rem;
+    padding-top: 1.25rem;
+    border-top: 1.5px solid var(--line-strong);
+  }
+  .beat-t {
+    font-weight: 700;
+    color: var(--coral-strong);
+    font-variant-numeric: tabular-nums;
+  }
+  .demo-beats h3 {
+    font-size: var(--text-xl);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo-scene,
+    .demo-bar i {
+      animation: none;
+    }
+    .s1 {
+      opacity: 1;
+    }
+    .demo-bar i {
+      transform: scaleX(0.15);
+    }
+  }
+</style>

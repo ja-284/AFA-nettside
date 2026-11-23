@@ -1,0 +1,334 @@
+---
+/** Fire illustrerte telefonskjermer for «Slik fungerer det». Dekorative. */
+import Photo from '../ui/Photo.astro';
+import Icon from '../ui/Icon.astro';
+---
+<div class="scr scr-chat is-active" data-how-screen="0" aria-hidden="true">
+  <div class="scr-head"><span class="avatar">AFA</span><span><b>AFA Videos</b><small>aktiv nå</small></span></div>
+  <div class="bubbles">
+    <p class="b them">Hei! Vi har ny lunsjmeny og vil gjerne vise den frem.</p>
+    <p class="b me">Så gøy! Hva er dere mest stolte av?</p>
+    <p class="b them">Suppa. Og folka på kjøkkenet.</p>
+    <p class="b me">Da kommer vi tirsdag kl. 14 og filmer begge deler.</p>
+    <p class="b them">Perfekt, sees!</p>
+  </div>
+  <div class="scr-input"><span>Skriv en melding …</span><Icon name="send" size={16} /></div>
+</div>
+
+<div class="scr scr-film" data-how-screen="1" aria-hidden="true">
+  <Photo slot="screenFilm" label={false} class="scr-photo" ratio="9:19.2" />
+  <div class="cam-grid"></div>
+  <div class="cam-top"><span class="rec"><span class="dot"></span>00:12</span><span class="cam-res">9:16</span></div>
+  <div class="cam-focus"></div>
+  <div class="cam-bottom"><span class="cam-mode">VIDEO</span><span class="cam-shutter"></span></div>
+</div>
+
+<div class="scr scr-edit" data-how-screen="2" aria-hidden="true">
+  <div class="edit-preview">
+    <Photo slot="screenPost" label={false} class="scr-photo" ratio="9:12" />
+    <span class="edit-caption">Nytt på menyen</span>
+  </div>
+  <div class="edit-tools"><Icon name="scissors" size={16} /><span>Klipp</span><span>Tekst</span><span>Lyd</span><span>Farger</span></div>
+  <div class="timeline">
+    <div class="track clips"><span style="--w: 22%; --c: var(--teal)"></span><span style="--w: 30%; --c: var(--coral)"></span><span style="--w: 18%; --c: var(--sun)"></span><span style="--w: 26%; --c: var(--mint)"></span></div>
+    <div class="track text"><span style="--w: 40%"></span><span style="--w: 30%"></span></div>
+    <div class="track wave">{Array.from({ length: 28 }, (_, i) => <i style={`--h: ${20 + ((i * 37) % 70)}%`}></i>)}</div>
+    <span class="playhead"></span>
+  </div>
+  <div class="edit-time">00:08 / 00:24</div>
+</div>
+
+<div class="scr scr-post" data-how-screen="3" aria-hidden="true">
+  <div class="post-head"><span class="avatar alt">DB</span><b>din.bedrift</b></div>
+  <Photo slot="screenPost" label={false} class="scr-photo post-photo" ratio="4:5" />
+  <div class="post-actions"><Icon name="heart" size={20} /><Icon name="chat" size={20} /><Icon name="send" size={20} /></div>
+  <p class="post-text"><b>din.bedrift</b> Ny meny fra tirsdag. Kom innom!</p>
+  <div class="toast"><Icon name="check" size={16} />Publisert</div>
+</div>
+
+<style>
+  .scr {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 800ms var(--ease-out);
+    font-size: clamp(9px, 0.82vw, 12.5px);
+    --ink-soft: #3e5761;
+    color: var(--navy);
+    background: var(--cream);
+  }
+  .scr.is-active {
+    opacity: 1;
+    transform: none;
+  }
+  .scr :global(.scr-photo) {
+    --photo-radius: 0;
+  }
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 2.6em;
+    height: 2.6em;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--cream);
+    font-size: 0.85em;
+    font-weight: 800;
+    flex: none;
+  }
+  .avatar.alt {
+    background: var(--sun);
+    color: var(--navy);
+  }
+  /* Chat */
+  .scr-head {
+    display: flex;
+    gap: 0.7em;
+    align-items: center;
+    padding: 18% 8% 5%;
+    border-bottom: 1px solid var(--line);
+    background: var(--white);
+  }
+  .scr-head small {
+    display: block;
+    color: var(--teal-ink);
+  }
+  .bubbles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55em;
+    padding: 7% 6%;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  .b {
+    max-width: 82%;
+    padding: 0.6em 0.85em;
+    border-radius: 1.1em;
+    line-height: 1.35;
+  }
+  .b.them {
+    background: var(--white);
+    border-bottom-left-radius: 0.3em;
+    box-shadow: var(--shadow-sm);
+  }
+  .b.me {
+    align-self: flex-end;
+    background: var(--teal-ink);
+    color: var(--white);
+    border-bottom-right-radius: 0.3em;
+  }
+  .scr-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 6% 9%;
+    padding: 0.8em 1em;
+    border-radius: 99px;
+    background: var(--white);
+    color: var(--ink-soft);
+  }
+  /* Filming */
+  .scr-film {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .scr-film :global(.scr-photo) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto !important;
+  }
+  .cam-grid {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent calc(33.3% - 0.5px), rgb(255 255 255 / 0.35) calc(33.3% - 0.5px), rgb(255 255 255 / 0.35) calc(33.3% + 0.5px), transparent calc(33.3% + 0.5px), transparent calc(66.6% - 0.5px), rgb(255 255 255 / 0.35) calc(66.6% - 0.5px), rgb(255 255 255 / 0.35) calc(66.6% + 0.5px), transparent calc(66.6% + 0.5px)),
+      linear-gradient(180deg, transparent calc(33.3% - 0.5px), rgb(255 255 255 / 0.35) calc(33.3% - 0.5px), rgb(255 255 255 / 0.35) calc(33.3% + 0.5px), transparent calc(33.3% + 0.5px), transparent calc(66.6% - 0.5px), rgb(255 255 255 / 0.35) calc(66.6% - 0.5px), rgb(255 255 255 / 0.35) calc(66.6% + 0.5px), transparent calc(66.6% + 0.5px));
+  }
+  .cam-top {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 18% 7% 0;
+    font-weight: 700;
+  }
+  .rec {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: center;
+    padding: 0.25em 0.7em;
+    border-radius: 99px;
+    background: var(--coral-strong);
+  }
+  .rec .dot {
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    background: var(--white);
+  }
+  .cam-res {
+    opacity: 0.85;
+  }
+  .cam-focus {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: 26%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border: 1.5px solid var(--sun);
+    border-radius: 8px;
+  }
+  .cam-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 7%;
+    display: grid;
+    justify-items: center;
+    gap: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  .cam-mode {
+    color: var(--sun);
+  }
+  .cam-shutter {
+    width: 4.2em;
+    height: 4.2em;
+    border: 3px solid var(--white);
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--coral) 52%, transparent 54%);
+  }
+  /* Redigering */
+  .scr-edit {
+    background: #0e2c38;
+    color: var(--cream);
+  }
+  .edit-preview {
+    position: relative;
+    margin: 17% 9% 0;
+    border-radius: 0.8em;
+    overflow: hidden;
+  }
+  .edit-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 12%;
+    translate: -50% 0;
+    padding: 0.35em 0.8em;
+    border-radius: 0.4em;
+    background: var(--white);
+    color: var(--navy);
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .edit-tools {
+    display: flex;
+    gap: 0.9em;
+    align-items: center;
+    justify-content: center;
+    padding: 5% 0 3%;
+    color: var(--on-dark-soft);
+  }
+  .edit-tools span:first-of-type {
+    color: var(--sun);
+  }
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 0.45em;
+    margin: 0 6%;
+    padding: 0.7em 0.5em;
+    border-radius: 0.6em;
+    background: rgb(255 255 255 / 0.06);
+  }
+  .track {
+    display: flex;
+    gap: 3px;
+    height: 1.7em;
+  }
+  .track span {
+    width: var(--w);
+    border-radius: 0.35em;
+    background: var(--c, var(--on-dark-soft));
+  }
+  .track.text {
+    height: 0.9em;
+  }
+  .track.text span {
+    background: rgb(247 244 239 / 0.5);
+  }
+  .track.wave {
+    align-items: center;
+    gap: 2px;
+    height: 1.6em;
+  }
+  .track.wave i {
+    flex: 1;
+    height: var(--h);
+    border-radius: 2px;
+    background: var(--mint);
+    opacity: 0.8;
+  }
+  .playhead {
+    position: absolute;
+    top: -0.3em;
+    bottom: -0.3em;
+    left: 38%;
+    width: 2px;
+    background: var(--white);
+    box-shadow: 0 0 0 1px rgb(11 37 48 / 0.4);
+  }
+  .edit-time {
+    margin: 0.8em 6% 0;
+    text-align: right;
+    color: var(--on-dark-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Publisert */
+  .scr-post {
+    background: var(--white);
+  }
+  .post-head {
+    display: flex;
+    gap: 0.6em;
+    align-items: center;
+    padding: 17% 6% 4%;
+  }
+  .post-actions {
+    display: flex;
+    gap: 1em;
+    padding: 4% 6% 2%;
+  }
+  .post-text {
+    padding: 0 6%;
+    line-height: 1.4;
+  }
+  .toast {
+    position: absolute;
+    left: 50%;
+    bottom: 7%;
+    translate: -50% 0;
+    display: inline-flex;
+    gap: 0.45em;
+    align-items: center;
+    padding: 0.6em 1.1em;
+    border-radius: 99px;
+    background: var(--navy);
+    color: var(--cream);
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+  }
+  .toast :global(svg) {
+    color: var(--mint);
+  }
+</style>

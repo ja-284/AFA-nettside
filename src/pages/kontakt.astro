@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import AreaMap from '../components/AreaMap.astro';
+import Field from '../components/ui/Field.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import TurnstileNote from '../components/TurnstileNote.astro';
+import { site } from '../config/site';
+import { HONEYPOT } from '../lib/forms';
+
+const crumbs = [
+  { name: 'Hjem', href: '/' },
+  { name: 'Kontakt', href: '/kontakt/' },
+];
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || site.turnstile.siteKey;
+---
+<BaseLayout title="Kontakt" description={`Ta kontakt med ${site.name}. Vi lager reels og bilder for bedrifter på Fornebu, Snarøya og Lysaker.`} og="kontakt" crumbs={crumbs}>
+  <PageHero eyebrow="Kontakt" title="Si hei" lead={`Har du et spørsmål, en idé eller lyst til å prøve oss? Send en melding. ${site.contact.responseTime}`} crumbs={crumbs} />
+
+  <section class="section tone-cream" aria-labelledby="kontaktinfo" style="padding-top: 0">
+    <div class="container contact-grid">
+      <div class="contact-info stack" style="--stack: 2rem">
+        <h2 id="kontaktinfo" class="sr-only">Kontaktinformasjon</h2>
+        <ul class="info-list">
+          <li class="card info" data-reveal>
+            <span class="info-icon"><Icon name="mail" /></span>
+            <span><span class="info-label">E-post</span><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></span>
+          </li>
+          {site.contact.phone && (
+            <li class="card info" data-reveal style="--i: 1">
+              <span class="info-icon"><Icon name="phone" /></span>
+              <span><span class="info-label">Telefon</span><a href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>{site.contact.phone}</a></span>
+            </li>
+          )}
+          <li class="card info" data-reveal style="--i: 2">
+            <span class="info-icon"><Icon name="pin" /></span>
+            <span><span class="info-label">Område</span>{site.areas.core.join(', ')}. {site.areas.later}</span>
+          </li>
+        </ul>
+        <div class="card order-teaser" data-reveal style="--i: 3">
+          <p class="title-md">Vil du bestille?</p>
+          <p class="muted">Bestillingsskjemaet tar to minutter, og den første prøven er gratis.</p>
+          <Button href="/bestill/">Gå til bestilling</Button>
+        </div>
+        <div data-reveal style="--i: 4"><AreaMap /></div>
+      </div>
+
+      <div class="card form-card" data-reveal style="--i: 1">
+        <h2 class="title-md form-title" id="skjema-title">Send en melding</h2>
+        <TurnstileNote />
+        <form action="/api/contact" method="post" class="form-grid" novalidate data-simple-form="contact" data-sitekey={siteKey} aria-labelledby="skjema-title">
+          <div class="form-alert" role="alert" data-form-alert></div>
+          <Field name="name" label="Navn" required autocomplete="name" maxlength={120} idPrefix="k" />
+          <Field name="email" label="E-post" type="email" required autocomplete="email" inputmode="email" maxlength={254} idPrefix="k" />
+          <Field name="phone" label="Telefon" type="tel" autocomplete="tel" inputmode="tel" maxlength={30} idPrefix="k" />
+          <Field name="message" label="Melding" type="textarea" required maxlength={3000} rows={6} idPrefix="k" />
+          <div class="hp" aria-hidden="true">
+            <label for="k-hp">Nettside (ikke fyll ut)</label>
+            <input id="k-hp" type="text" name={HONEYPOT} tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="turnstile-box" data-turnstile></div>
+          <p class="small muted">Vi bruker opplysningene bare til å svare deg. Les <a href="/personvern/">personvernerklæringen</a>.</p>
+          <Button type="submit" size="lg" icon="send" data-submit>Send melding</Button>
+        </form>
+        <div class="success" data-form-success hidden tabindex="-1">
+          <span class="success-icon"><Icon name="check" size={28} /></span>
+          <p class="title-md">Takk for meldingen!</p>
+          <p class="muted">{site.contact.responseTime} Svaret kommer til e-postadressen du oppga.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .contact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .form-card {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+  .info-list {
+    display: grid;
+    gap: 0.9rem;
+    padding: 0;
+    list-style: none;
+  }
+  .info {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.25rem 1.4rem;
+  }
+  .info-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: var(--mist);
+    color: var(--teal-ink);
+  }
+  .info-label {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .info a {
+    font-weight: 620;
+    font-size: var(--text-lg);
+    overflow-wrap: anywhere;
+  }
+  .order-teaser {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+    padding: clamp(24px, 3vw, 36px);
+    background: var(--mist);
+    box-shadow: none;
+  }
+  .form-card {
+    padding: clamp(24px, 4vw, 48px);
+  }
+  .form-title {
+    margin-bottom: 1.75rem;
+  }
+  .form-card a {
+    color: var(--coral-strong);
+  }
+  .success {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .success-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e3f3ec;
+    color: #0e4a37;
+  }
+</style>

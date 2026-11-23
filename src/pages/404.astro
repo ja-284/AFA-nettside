@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import PhoneFrame from '../components/ui/PhoneFrame.astro';
+---
+<BaseLayout title="Fant ikke siden" noindex description="Siden finnes ikke.">
+  <section class="section tone-cream nf">
+    <div class="blobs" aria-hidden="true">
+      <span class="blob" style="--c: rgb(217 72 43 / 0.3); --size: 50vmax; top: -30%; right: -10%"></span>
+      <span class="blob" style="--c: rgb(27 138 156 / 0.35); --size: 45vmax; bottom: -30%; left: -15%"></span>
+    </div>
+    <div class="container nf-grid">
+      <div class="stack" style="--stack: 1.5rem">
+        <p class="eyebrow">Feil 404</p>
+        <h1 class="display nf-title">Klippet bort.</h1>
+        <p class="lead">Denne siden havnet visst på gulvet i klipperommet. Kanskje lenken er gammel, eller kanskje vi har flyttet på noe.</p>
+        <div class="btn-row">
+          <Button href="/" icon="arrow-left">Til forsiden</Button>
+          <Button href="/bestill/" variant="ghost">Bestill gratis prøve</Button>
+        </div>
+      </div>
+      <div class="nf-phone" aria-hidden="true">
+        <PhoneFrame tilt={6}>
+          <div class="nf-screen">
+            <span class="nf-code">404</span>
+            <span class="nf-bar"><i></i></span>
+            <span class="nf-text">Klippet finnes ikke</span>
+          </div>
+        </PhoneFrame>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    overflow: hidden;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding-top: calc(var(--header-h) + 40px);
+  }
+  .nf-grid {
+    position: relative;
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .nf-grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+  .nf-title {
+    font-size: clamp(3.2rem, 1rem + 9vw, 9rem);
+  }
+  .nf-phone {
+    justify-self: center;
+  }
+  .nf-screen {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    background:
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 2px, transparent 2px 4px),
+      linear-gradient(160deg, var(--petrol), var(--navy));
+    color: var(--cream);
+  }
+  .nf-code {
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    animation: glitch 2.6s steps(1) infinite;
+  }
+  .nf-bar {
+    width: 60%;
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(247 244 239 / 0.2);
+    overflow: hidden;
+  }
+  .nf-bar i {
+    display: block;
+    width: 35%;
+    height: 100%;
+    background: var(--coral);
+  }
+  .nf-text {
+    font-size: 0.875rem;
+    color: var(--on-dark-soft);
+  }
+  @keyframes glitch {
+    0%, 92%, 100% { transform: none; text-shadow: none; }
+    93% { transform: translateX(-3px); text-shadow: 3px 0 var(--coral), -3px 0 var(--teal); }
+    96% { transform: translateX(2px); text-shadow: -2px 0 var(--sun), 2px 0 var(--mint); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nf-code { animation: none; }
+  }
+</style>

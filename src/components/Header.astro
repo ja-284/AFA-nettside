@@ -1,0 +1,262 @@
+---
+import { site } from '../config/site';
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import Logo from './ui/Logo.astro';
+import { nav } from '../config/nav';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(href);
+---
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <Logo size={38} />
+      <span class="brand-word">AFA <span>Videos</span><span class="sr-only"> – til forsiden</span></span>
+    </a>
+    <nav class="nav-desktop" aria-label="Hovedmeny">
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.short}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <Button href="/bestill/" size="sm" class="header-cta" magnetic>Bestill gratis prøve</Button>
+      <button class="menu-btn" type="button" popovertarget="mobilmeny" aria-controls="mobilmeny" aria-expanded="false" data-menu-open>
+        <span>Meny</span>
+        <Icon name="menu" size={20} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobilmeny" class="mobile-menu tone-dark" popover aria-label="Meny" data-menu>
+  <div class="mobile-menu-top container">
+    <a class="brand" href="/"><Logo size={38} light /><span class="brand-word">AFA <span>Videos</span><span class="sr-only"> – til forsiden</span></span></a>
+    <button class="menu-btn menu-close" type="button" popovertarget="mobilmeny" popovertargetaction="hide" data-menu-close>
+      <span>Lukk</span>
+      <Icon name="close" size={20} />
+    </button>
+  </div>
+  <nav class="container mobile-nav" aria-label="Hovedmeny (mobil)">
+    <ul>
+      <li style="--i: 0"><a href="/" aria-current={path === '/' ? 'page' : undefined}>Hjem</a></li>
+      {nav.map((item, i) => (
+        <li style={`--i: ${i + 1}`}><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <div class="container mobile-menu-foot">
+    <Button href="/bestill/" size="lg">Bestill gratis prøve</Button>
+    <a class="mobile-mail" href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    height: var(--header-h);
+    transition:
+      transform var(--dur) var(--ease-out),
+      background-color var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out);
+  }
+  .site-header.is-scrolled {
+    background: rgb(247 244 239 / 0.78);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .site-header.is-hidden:not(:focus-within) {
+    transform: translateY(-110%);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 100%;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    border-radius: 12px;
+  }
+  .brand-word {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .brand-word span {
+    font-weight: 450;
+    letter-spacing: -0.02em;
+  }
+  .nav-desktop {
+    display: none;
+  }
+  .nav-desktop ul {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    margin: 0;
+    list-style: none;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.55);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .nav-desktop a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 1rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.9375rem;
+    font-weight: 560;
+    text-decoration: none;
+    transition: background-color var(--dur-fast), color var(--dur-fast);
+  }
+  .nav-desktop a:hover {
+    background: rgb(11 37 48 / 0.07);
+  }
+  .nav-desktop a[aria-current='page'] {
+    background: var(--navy);
+    color: var(--cream);
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .header-actions :global(.header-cta) {
+    display: none;
+  }
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 1.1rem;
+    border: 1.5px solid var(--line-strong);
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.6);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  @media (min-width: 700px) {
+    .header-actions :global(.header-cta) {
+      display: inline-flex;
+    }
+  }
+  @media (min-width: 1080px) {
+    .nav-desktop {
+      display: block;
+    }
+    .menu-btn {
+      display: none;
+    }
+  }
+
+  /* Mobilmeny (Popover API – fungerer også uten JavaScript) */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0 0 2rem;
+    border: 0;
+    overflow-y: auto;
+    flex-direction: column;
+    background:
+      radial-gradient(80% 60% at 100% 0%, rgb(27 138 156 / 0.45), transparent 60%),
+      radial-gradient(70% 50% at 0% 100%, rgb(217 72 43 / 0.28), transparent 60%),
+      var(--navy);
+    color: var(--cream);
+    opacity: 0;
+    transition:
+      opacity 380ms var(--ease-out),
+      overlay 380ms allow-discrete,
+      display 380ms allow-discrete;
+  }
+  .mobile-menu:popover-open {
+    display: flex;
+    opacity: 1;
+  }
+  @starting-style {
+    .mobile-menu:popover-open {
+      opacity: 0;
+    }
+  }
+  .mobile-menu::backdrop {
+    background: transparent;
+  }
+  .mobile-menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-h);
+    flex: none;
+  }
+  .menu-close {
+    background: transparent;
+    border-color: rgb(247 244 239 / 0.35);
+    color: var(--cream);
+  }
+  .mobile-nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-block: 2rem;
+  }
+  .mobile-nav ul {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0;
+    list-style: none;
+  }
+  .mobile-nav a {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: clamp(2.1rem, 9vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .mobile-nav a[aria-current='page'] {
+    color: var(--coral-on-dark);
+  }
+  .mobile-menu:popover-open .mobile-nav li {
+    animation: menu-in 600ms var(--ease-out) both;
+    animation-delay: calc(80ms + var(--i) * 55ms);
+  }
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  .mobile-menu-foot {
+    display: grid;
+    gap: 1.2rem;
+    justify-items: start;
+  }
+  .mobile-mail {
+    color: var(--on-dark-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu:popover-open .mobile-nav li {
+      animation: none;
+    }
+  }
+</style>

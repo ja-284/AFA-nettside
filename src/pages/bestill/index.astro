@@ -1,0 +1,263 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Stepper from '../../components/ui/Stepper.astro';
+import Field from '../../components/ui/Field.astro';
+import Choices from '../../components/ui/Choices.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import TurnstileNote from '../../components/TurnstileNote.astro';
+import { formatPrice, site } from '../../config/site';
+import { areas, contactPrefs, employeeRanges, HONEYPOT, industries, startOptions, wishes } from '../../lib/forms';
+
+const crumbs = [
+  { name: 'Hjem', href: '/' },
+  { name: 'Bestill', href: '/bestill/' },
+];
+const steps = ['Pakke', 'Bedriften', 'Ønsker', 'Kontakt', 'Send'];
+const packageOptions = [
+  ...site.packages.map((p) => ({ value: p.id, label: p.name, desc: `${p.tagline} ${formatPrice(p)}${p.unit && p.price !== null ? ` ${p.unit}` : ''}.` })),
+  { value: 'usikker', label: 'Vet ikke ennå', desc: 'Helt greit. Vi hjelper dere å finne ut hva som passer.' },
+];
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || site.turnstile.siteKey;
+const after = [
+  { icon: 'chat' as const, text: `Vi tar kontakt. ${site.contact.responseTime}` },
+  { icon: 'camera' as const, text: 'Vi avtaler en dag og kommer for å filme.' },
+  { icon: 'send' as const, text: `Dere får ferdige klipp ${site.deliveryTime}.` },
+];
+---
+<BaseLayout title="Bestill" description="Bestill en gratis prøve eller en månedlig pakke med reels og bilder. Fem korte steg, ingen binding." og="bestill" crumbs={crumbs}>
+  <PageHero eyebrow="Bestill" title="La oss komme i gang" lead="Fem korte steg, og vi tar kontakt. Den første prøven er gratis, og dere forplikter dere ikke til noe." crumbs={crumbs} />
+
+  <section class="section tone-cream order-section" aria-label="Bestillingsskjema">
+    <div class="container order-grid">
+      <div class="card order-card">
+        <TurnstileNote />
+        <Stepper steps={steps} />
+        <form action="/api/orders" method="post" novalidate data-order-form data-sitekey={siteKey}>
+          <div class="form-alert" role="alert" data-form-alert></div>
+
+          <section class="step" data-step="0" aria-labelledby="step-0-title">
+            <h2 class="step-title" id="step-0-title" tabindex="-1">Hvilken pakke er dere interessert i?</h2>
+            <Choices name="package" legend="Velg pakke" legendClass="sr-only" options={packageOptions} required layout="list" idPrefix="b" />
+          </section>
+
+          <section class="step" data-step="1" aria-labelledby="step-1-title">
+            <h2 class="step-title" id="step-1-title" tabindex="-1">Om bedriften</h2>
+            <div class="form-grid two">
+              <Field name="business_name" label="Navn på bedriften" required autocomplete="organization" maxlength={120} class="span-2" idPrefix="b" />
+              <Field name="industry" label="Bransje" type="select" required options={industries} idPrefix="b" />
+              <Field name="employees" label="Antall ansatte" type="select" required options={employeeRanges} idPrefix="b" />
+              <Choices name="area" legend="Hvor holder dere til?" options={areas} required layout="chips" idPrefix="b" />
+              <Field name="area_other" label="Hvilket sted?" conditional hint="Fyll ut hvis du valgte «Annet sted»." maxlength={80} class="span-2" idPrefix="b" />
+              <Field name="web" label="Nettside eller Instagram" hint="F.eks. bedrift.no eller @bedrift" maxlength={200} class="span-2" idPrefix="b" />
+            </div>
+          </section>
+
+          <section class="step" data-step="2" aria-labelledby="step-2-title">
+            <h2 class="step-title" id="step-2-title" tabindex="-1">Hva vil dere vise frem?</h2>
+            <div class="form-grid">
+              <Choices name="wishes" legend="Kryss av det som passer" options={wishes} multiple layout="chips" idPrefix="b" />
+              <Field name="message" label="Fortell litt mer" type="textarea" hint="Hva er dere mest stolte av? Har dere noe spesielt på gang?" maxlength={2000} idPrefix="b" />
+              <div class="form-grid two">
+                <Field name="start_when" label="Ønsket oppstart" type="select" options={startOptions} idPrefix="b" />
+                <Field name="time_window" label="Når passer det å filme?" hint="F.eks. tirsdager før kl. 11" maxlength={200} idPrefix="b" />
+              </div>
+            </div>
+          </section>
+
+          <section class="step" data-step="3" aria-labelledby="step-3-title">
+            <h2 class="step-title" id="step-3-title" tabindex="-1">Hvem skal vi snakke med?</h2>
+            <div class="form-grid two">
+              <Field name="contact_name" label="Kontaktperson" required autocomplete="name" maxlength={120} class="span-2" idPrefix="b" />
+              <Field name="email" label="E-post" type="email" required autocomplete="email" inputmode="email" maxlength={254} idPrefix="b" />
+              <Field name="phone" label="Telefon" type="tel" autocomplete="tel" inputmode="tel" hint="Må fylles ut hvis vi skal ringe eller sende SMS." maxlength={30} idPrefix="b" />
+              <Choices name="contact_pref" legend="Hvordan vil du helst bli kontaktet?" options={contactPrefs} required layout="chips" idPrefix="b" />
+            </div>
+          </section>
+
+          <section class="step" data-step="4" aria-labelledby="step-4-title">
+            <h2 class="step-title" id="step-4-title" tabindex="-1">Ser alt riktig ut?</h2>
+            <dl class="summary" data-summary></dl>
+            <div class="form-grid">
+              <div class="field" data-field-wrap="consent">
+                <label class="check">
+                  <input type="checkbox" name="consent" value="1" required id="b-consent" aria-describedby="b-consent-error" />
+                  <span>Jeg godtar at {site.name} lagrer opplysningene for å kunne svare på bestillingen. Opplysningene slettes senest {site.retentionMonths} måneder etter siste kontakt. Les <a href="/personvern/">personvernerklæringen</a>.</span>
+                </label>
+                <p class="field-error" id="b-consent-error" aria-live="polite"></p>
+              </div>
+              <div class="hp" aria-hidden="true">
+                <label for="b-hp">Nettside (ikke fyll ut)</label>
+                <input id="b-hp" type="text" name={HONEYPOT} tabindex="-1" autocomplete="off" />
+              </div>
+              <div class="turnstile-box" data-turnstile></div>
+            </div>
+          </section>
+
+          <div class="step-nav">
+            <Button variant="ghost" icon="arrow-left" data-prev class="prev-btn" hidden>Tilbake</Button>
+            <Button data-next class="next-btn">Neste</Button>
+            <Button type="submit" size="lg" icon="send" data-submit class="submit-btn">Send bestilling</Button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="order-aside" aria-labelledby="etterpa">
+        <h2 id="etterpa" class="aside-title">Dette skjer etterpå</h2>
+        <ol>
+          {after.map((a) => (
+            <li><span class="aside-icon"><Icon name={a.icon} size={20} /></span><span>{a.text}</span></li>
+          ))}
+        </ol>
+        <p class="small muted">Spørsmål? Skriv til <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .order-section {
+    padding-top: 0;
+  }
+  .order-grid {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    align-items: start;
+  }
+  @media (min-width: 1080px) {
+    .order-grid {
+      grid-template-columns: minmax(0, 1fr) 320px;
+    }
+    .order-aside {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+  .order-card {
+    padding: clamp(22px, 4.5vw, 56px);
+  }
+  .step + .step {
+    margin-top: 3rem;
+  }
+  .step-title {
+    margin-bottom: 1.5rem;
+    font-size: var(--text-xl);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+  .step-title:focus {
+    outline: none;
+  }
+  :global(.js) form[data-order-form].is-enhanced .step:not(.is-current) {
+    display: none;
+  }
+  /* Før skriptet har lastet: vis bare første steg, så siden ikke hopper (CLS). */
+  :global(html.js:not(.reveal-fallback)) form[data-order-form]:not(.is-enhanced) .step:not([data-step='0']),
+  :global(html.js:not(.reveal-fallback)) form[data-order-form]:not(.is-enhanced) :global(.submit-btn) {
+    display: none;
+  }
+  :global(html:not(.js)) form[data-order-form] :global(.next-btn),
+  :global(html.reveal-fallback) form[data-order-form]:not(.is-enhanced) :global(.next-btn) {
+    display: none;
+  }
+  :global(.js) form[data-order-form].is-enhanced .step + .step {
+    margin-top: 0;
+  }
+  form[data-order-form].is-enhanced .step.is-current {
+    animation: step-in 500ms var(--ease-out);
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+  }
+  .step-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .step-nav :global(.next-btn),
+  .step-nav :global(.submit-btn) {
+    margin-left: auto;
+  }
+  .summary {
+    display: grid;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-radius: var(--radius);
+    background: var(--mist);
+    overflow: hidden;
+  }
+  .summary :global(div) {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .summary :global(div) {
+      grid-template-columns: 200px 1fr;
+      gap: 1rem;
+    }
+  }
+  .summary :global(dt) {
+    color: var(--ink-soft);
+    font-weight: 560;
+  }
+  .summary :global(dd) {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+  .summary :global(button) {
+    justify-self: start;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--coral-strong);
+    font-weight: 620;
+    text-decoration: underline;
+  }
+  .check a,
+  .order-aside a {
+    color: var(--coral-strong);
+  }
+  .order-aside {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(24px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    background: var(--mist);
+  }
+  .aside-title {
+    font-size: var(--text-lg);
+    font-weight: 750;
+  }
+  .order-aside ol {
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+  .order-aside li {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+  .aside-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--teal-ink);
+  }
+</style>

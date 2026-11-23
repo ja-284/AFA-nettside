@@ -1,0 +1,197 @@
+---
+import PhoneFrame from '../ui/PhoneFrame.astro';
+import HowScreens from '../screens/HowScreens.astro';
+
+const steps = [
+  { title: 'Vi prater', text: 'Dere forteller hva dere vil vise frem. Vi kommer med idéer og avtaler en dag som passer.' },
+  { title: 'Vi filmer', text: 'Vi kommer til dere og filmer og fotograferer med mobil. Det tar sjelden mer enn et par timer, og vi forstyrrer ikke kundene.' },
+  { title: 'Vi redigerer', text: 'Vi klipper, tekster og legger på lyd. Dere får se alt og kan be om endringer før det er ferdig.' },
+  { title: 'Dere legger ut', text: 'Dere får ferdige klipp og bilder, klare til å publiseres. Så er det bare å la kundene komme.' },
+];
+---
+<section id="slik-fungerer-det" class="section tone-dark how" aria-labelledby="how-title" data-motion="how">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="container how-head">
+    <p class="eyebrow" data-reveal>Slik fungerer det</p>
+    <h2 id="how-title" class="title" data-reveal style="--i: 1">Fire steg.<br /><span class="accent">Null stress.</span></h2>
+  </div>
+  <div class="how-stage" data-how-stage>
+    <div class="container how-grid">
+      <ol class="how-steps" data-how-steps>
+        {steps.map((s, i) => (
+          <li class:list={['how-step', i === 0 && 'is-active']} data-how-step={i}>
+            <span class="how-num" aria-hidden="true">0{i + 1}</span>
+            <div>
+              <h3 class="how-title">{s.title}</h3>
+              <p class="how-text">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="how-visual">
+        <div class="how-phone">
+          <PhoneFrame><HowScreens /></PhoneFrame>
+        </div>
+        <div class="how-bars" aria-hidden="true">
+          {steps.map((_, i) => <span><i data-how-bar={i}></i></span>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how {
+    padding-bottom: 0;
+    overflow: clip;
+    background:
+      radial-gradient(60% 50% at 85% 30%, rgb(27 138 156 / 0.35), transparent 70%),
+      radial-gradient(50% 40% at 10% 90%, rgb(217 72 43 / 0.16), transparent 70%),
+      var(--navy);
+  }
+  .how-head {
+    position: relative;
+    display: grid;
+    gap: 1.1rem;
+    margin-bottom: clamp(32px, 5vw, 64px);
+  }
+  .how-stage {
+    position: relative;
+    padding-bottom: var(--section-y);
+  }
+  .how-grid {
+    display: grid;
+    gap: clamp(32px, 5vw, 80px);
+  }
+  .how-steps {
+    display: grid;
+    gap: clamp(28px, 4vw, 56px);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .how-step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    align-items: start;
+  }
+  .how-num {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 0.8rem + 0.8vw, 1.4rem);
+    font-weight: 700;
+    color: var(--sun);
+    padding-top: 0.35em;
+  }
+  .how-title {
+    font-size: clamp(2.3rem, 1.2rem + 4.2vw, 5.2rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+    text-transform: uppercase;
+  }
+  .how-text {
+    margin-top: 0.8rem;
+    max-width: 38ch;
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    color: var(--on-dark-soft);
+  }
+  .how-visual {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+  .how-phone :global(.phone) {
+    --w: clamp(200px, 56vw, 300px);
+  }
+  .how-bars {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .how-grid {
+      grid-template-columns: 1.25fr 1fr;
+      align-items: start;
+    }
+    .how-visual {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+    .how-phone :global(.phone) {
+      --w: clamp(240px, 22vw, 320px);
+    }
+  }
+
+  /* ── Festet versjon (aktiveres av motion.ts når bevegelse er tillatt) ── */
+  .how.is-pinned .how-stage {
+    height: 100svh;
+    padding-bottom: 0;
+    display: grid;
+    align-items: center;
+  }
+  .how.is-pinned .how-grid {
+    align-items: center;
+  }
+  .how.is-pinned .how-steps {
+    display: grid;
+    grid-template-areas: 'stack';
+  }
+  .how.is-pinned .how-step {
+    grid-area: stack;
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+    transition:
+      opacity 500ms var(--ease-out),
+      transform 700ms var(--ease-out);
+    pointer-events: none;
+  }
+  .how.is-pinned .how-step.is-active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .how.is-pinned .how-step.is-past {
+    transform: translate3d(0, -40px, 0);
+  }
+  .how.is-pinned .how-visual {
+    position: relative;
+    top: auto;
+  }
+  .how.is-pinned .how-bars {
+    display: flex;
+    gap: 8px;
+    width: min(100%, 300px);
+  }
+  .how-bars span {
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(247 244 239 / 0.18);
+    overflow: hidden;
+  }
+  .how-bars i {
+    display: block;
+    height: 100%;
+    background: var(--sun);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+  @media (max-width: 899px) {
+    .how.is-pinned .how-grid {
+      grid-template-rows: auto auto;
+      gap: 24px;
+    }
+    .how.is-pinned .how-visual {
+      order: -1;
+    }
+    .how.is-pinned .how-phone :global(.phone) {
+      --w: min(44vw, 24svh);
+    }
+    .how.is-pinned .how-title {
+      font-size: clamp(2rem, 9vw, 3rem);
+    }
+    .how.is-pinned .how-text {
+      font-size: 1.0625rem;
+    }
+  }
+</style>
